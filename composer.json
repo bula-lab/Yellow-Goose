@@ -1,0 +1,12 @@
+
+
+{
+    "name": "example/zolta-gaska",
+    "description": "Żółta-Gąska Framework",
+    "autoload": {
+        "psr-4": {
+            "ZoltaGaska\\": "src/"
+        }
+    }
+}
+
