@@ -1,0 +1,61 @@
+#!/usr/bin/env php
+<?php
+
+// Plik wykonywalny `gaska`
+
+// Upewnij się, że jesteśmy w głównym katalogu projektu
+chdir(__DIR__);
+
+// Załaduj autoloader, aby mieć dostęp do klas frameworka
+require __DIR__ . '/vendor/autoload.php';
+
+// Pobierz argumenty przekazane do skryptu
+$argv = $_SERVER['argv'];
+
+// Pierwszy argument to nazwa skryptu, usuwamy go
+array_shift($argv);
+
+// Drugi argument to komenda
+$command = $argv[0] ?? null;
+array_shift($argv);
+
+// Prosty system dispatchingu komend
+switch ($command) {
+    case 'serve':
+        runServeCommand($argv);
+        break;
+
+    case null:
+        echo "Żółta-Gąska CLI\n\n";
+        echo "Użycie: php gaska <komenda> [opcje]\n\n";
+        echo "Dostępne komendy:\n";
+        echo "  serve    Uruchamia serwer deweloperski\n";
+        break;
+
+    default:
+        echo "Błąd: Nieznana komenda '{$command}'\n";
+        exit(1);
+}
+
+function runServeCommand(array $args): void
+{
+    $host = 'localhost';
+    $port = 8000;
+
+    // Proste parsowanie argumentów --host i --port
+    foreach ($args as $arg) {
+        if (str_starts_with($arg, '--host=')) {
+            $host = substr($arg, 7);
+        } elseif (str_starts_with($arg, '--port=')) {
+            $port = (int) substr($arg, 7);
+        }
+    }
+
+    $publicPath = __DIR__ . '/public';
+
+    echo "Uruchamianie serwera deweloperskiego Żółta-Gąska na http://{$host}:{$port}\n";
+    echo "Naciśnij Ctrl+C, aby zatrzymać serwer.\n";
+
+    // Użyj `passthru`, aby logi z serwera były widoczne w konsoli
+    passthru("php -S {$host}:{$port} -t {$publicPath}");
+}
