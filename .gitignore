@@ -1,5 +1,6 @@
 # Dependencies
 /vendor/
+/node_modules/
 
 # Environment
 .env
@@ -17,9 +18,17 @@ yarn-error.log*
 
 # Build artifacts
 /build/
+/public/build/
 /dist/
 
 # Cache
 .cache/
 
 .idea/
+
+# Local application data and test artifacts
+/database/*.sqlite*
+/.venv/
+/test-results/
+/generated_images/
+__pycache__/

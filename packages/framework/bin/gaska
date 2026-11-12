@@ -1,0 +1,4 @@
+#!/usr/bin/env php
+<?php
+require $_composer_autoload_path ?? dirname(__DIR__, 3) . '/autoload.php';
+exit(ZoltaGaska\Console\Cli::run(getcwd(), array_slice($_SERVER['argv'], 1)));

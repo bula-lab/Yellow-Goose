@@ -4,15 +4,56 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "66db6d6a7e70143b8ee9ef0180e37b02",
-    "packages": [],
+    "content-hash": "a6035087edce39c6b065650e9516f63b",
+    "packages": [
+        {
+            "name": "yellow-goose/framework",
+            "version": "dev-main",
+            "dist": {
+                "type": "path",
+                "url": "packages/framework",
+                "reference": "8a46cb53a6c99a93b147e32978f2588e74fbc697"
+            },
+            "require": {
+                "ext-json": "*",
+                "ext-pdo": "*",
+                "php": ">=8.1"
+            },
+            "suggest": {
+                "ext-pdo_mysql": "MySQL database support",
+                "ext-pdo_sqlite": "SQLite database support"
+            },
+            "bin": [
+                "bin/gaska"
+            ],
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "ZoltaGaska\\": "src/"
+                }
+            },
+            "description": "PHP file routing, loaders, database and React SSR runtime",
+            "transport-options": {
+                "symlink": true,
+                "relative": true
+            }
+        }
+    ],
     "packages-dev": [],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {},
+    "stability-flags": {
+        "yellow-goose/framework": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
-    "platform": {},
+    "platform": {
+        "php": ">=8.1",
+        "ext-pdo": "*",
+        "ext-pdo_sqlite": "*",
+        "ext-mbstring": "*",
+        "ext-json": "*"
+    },
     "platform-dev": {},
-    "plugin-api-version": "2.6.0"
+    "plugin-api-version": "2.9.0"
 }

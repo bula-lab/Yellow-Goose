@@ -1,76 +1,31 @@
-# Dokumentacja API: Konfiguracja
+# Konfiguracja
 
-Wszystkie pliki konfiguracyjne dla frameworka Żółta-Gąska znajdują się w katalogu `config`. Każda opcja jest dobrze udokumentowana, więc możesz swobodnie przeglądać pliki i zapoznawać się z dostępnymi ustawieniami.
+`bootstrap.php` wywołuje Runtime::boot(), które ładuje opcjonalny `.env`
+oraz config/database.php i przekazuje konfigurację do Connection.
+Użyj `.env.example` jako wzoru. Wartości są literalne; parser nie rozwija zmiennych
+ani sekwencji escape. Obsługuje puste wartości, komentarze i otoczenie wartości
+pojedynczymi/podwójnymi cudzysłowami. Zmienne procesu mają pierwszeństwo.
 
-## Zmienne Środowiskowe (`.env`)
+Domyślnie: DB_CONNECTION=sqlite, DB_DATABASE=database/database.sqlite.
+Ścieżki względne SQLite są liczone od katalogu projektu. Możliwe jest też :memory:.
 
-Większość kluczowych ustawień aplikacji (zwłaszcza tych, które różnią się między środowiskami - deweloperskim, produkcyjnym, testowym) jest kontrolowana za pomocą zmiennych środowiskowych.
+MySQL: DB_CONNECTION=mysql oraz DB_HOST, DB_PORT, DB_DATABASE, DB_USERNAME,
+DB_PASSWORD. Baza MySQL musi już istnieć; migrator tworzy w niej tabele.
+Wymagane rozszerzenie pdo_mysql. Domyślny charset połączenia to utf8mb4.
 
-U podstawy Twojego projektu znajduje się plik `.env.example`. Powinieneś skopiować go do nowego pliku o nazwie `.env`. To właśnie w pliku `.env` umieszczasz swoje dane dostępowe do bazy danych, klucze API, itp. Plik `.env` nie powinien być dodawany do systemu kontroli wersji.
+Kod konfiguracji: `config/database.php`. Brak globalnych helperów env()/config()
+i komend cache konfiguracji.
 
-**Przykład pliku `.env`:**
-```dotenv
-APP_NAME="Żółta Gąska"
-APP_ENV=local
-APP_DEBUG=true
-APP_URL=http://localhost:8000
+Opcjonalne `config/app.php` zwraca tablicę metadanych dokumentu: `title`, `favicon`
+i `appleTouchIcon`. Są renderowane w HTML także przed hydracją. Pliki graficzne
+aplikacja umieszcza w `public/`; konsument pakietu bez tego pliku nie dostaje linków
+do nieistniejących ikon demonstracji.
 
-DB_CONNECTION=mysql
-DB_HOST=127.0.0.1
-DB_PORT=3306
-DB_DATABASE=gaska_db
-DB_USERNAME=root
-DB_PASSWORD=
-```
-
-### Funkcja pomocnicza `env()`
-
-Wartości z pliku `.env` są ładowane do plików konfiguracyjnych w katalogu `config` za pomocą funkcji pomocniczej `env()`. Możesz podać drugi argument, który zostanie użyty jako wartość domyślna, jeśli zmienna środowiskowa nie istnieje.
-
-```php
-// config/app.php
-
-'debug' => env('APP_DEBUG', false),
-```
-
-## Dostęp do Wartości Konfiguracyjnych
-
-Możesz łatwo uzyskać dostęp do wartości konfiguracyjnych z dowolnego miejsca w aplikacji za pomocą globalnej funkcji pomocniczej `config()`.
-
-### Funkcja pomocnicza `config()`
-
-Funkcja `config()` przyjmuje jako argument ciąg znaków w formacie `nazwa_pliku.klucz_konfiguracji`.
-
-**Przykład:**
-
-Aby pobrać nazwę aplikacji z pliku `config/app.php`:
-```php
-$appName = config('app.name');
-```
-
-Aby pobrać domyślny sterownik bazy danych z pliku `config/database.php`:
-```php
-$dbConnection = config('database.default');
-```
-
-Możesz również podać wartość domyślną, która zostanie zwrócona, jeśli dana opcja konfiguracji nie istnieje:
-
-```php
-$value = config('app.non_existent_key', 'wartość domyślna');
-```
-
-## Buforowanie Konfiguracji (Caching)
-
-Aby zwiększyć wydajność aplikacji na środowisku produkcyjnym, powinieneś zbuforować wszystkie pliki konfiguracyjne w jednym pliku. Użyj do tego komendy `config:cache` w CLI `gaska`.
-
-```bash
-php gaska config:cache
-```
-
-Ta komenda połączy wszystkie opcje konfiguracyjne w jeden plik, który będzie szybko wczytywany przez framework. Po uruchomieniu tej komendy, plik `.env` nie będzie już wczytywany. Aby odświeżyć konfigurację, musisz ponownie uruchomić `config:cache`.
-
-Aby wyczyścić bufor konfiguracji, użyj komendy `config:clear`.
-
-```bash
-php gaska config:clear
-```
+GASKA_VITE_DEV_SERVER jest ustawiane przez `npm run dev` (PHP + Vite)
+lub `php gaska serve --dev` (tylko PHP). Wybiera CSR z HMR.
+GASKA_SSR=0 jawnie wyłącza SSR dla builda; domyślnie SSR jest włączone.
+GASKA_NODE_BINARY wskazuje Node (domyślnie node z PATH).
+Supervisor przekazuje GASKA_VITE_PORT do konfiguracji Vite; port wybierasz
+przez `npm run dev -- --vite-port=5174`.
+GASKA_SESSION_PATH opcjonalnie wskazuje istniejący zapisywalny katalog sesji;
+testy wykorzystują go do izolacji. Standardowo PHP używa swojego katalogu sesji.

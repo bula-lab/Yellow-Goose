@@ -1,27 +1,20 @@
 <?php
-
-// config/database.php
-
+$database = getenv('DB_DATABASE');
+$sqlite = $database !== false && $database !== '' ? $database : 'database/database.sqlite';
+if ($sqlite !== ':memory:' && !str_starts_with($sqlite, '/') && !preg_match('/^[A-Za-z]:[\\\\\/]/', $sqlite)) {
+    $sqlite = dirname(__DIR__) . '/' . $sqlite;
+}
 return [
-    'default' => getenv('DB_CONNECTION') ?: 'mysql',
-
+    'default' => getenv('DB_CONNECTION') ?: 'sqlite',
     'connections' => [
+        'sqlite' => ['driver' => 'sqlite', 'database' => $sqlite],
         'mysql' => [
-            'driver' => 'mysql',
-            'host' => getenv('DB_HOST') ?: '127.0.0.1',
+            'driver' => 'mysql', 'host' => getenv('DB_HOST') ?: '127.0.0.1',
             'port' => getenv('DB_PORT') ?: '3306',
-            'database' => getenv('DB_DATABASE') ?: 'zolta_gaska',
+            'database' => $database !== false && $database !== '' ? $database : 'yellow_goose',
             'username' => getenv('DB_USERNAME') ?: 'root',
-            'password' => getenv('DB_PASSWORD') ?: '',
+            'password' => getenv('DB_PASSWORD') !== false ? getenv('DB_PASSWORD') : '',
             'charset' => 'utf8mb4',
-            'collation' => 'utf8mb4_unicode_ci',
-            'prefix' => '',
-        ],
-
-        'sqlite' => [
-            'driver' => 'sqlite',
-            'database' => getenv('DB_DATABASE') ?: __DIR__ . '/../database/database.sqlite',
-            'prefix' => '',
         ],
     ],
 ];

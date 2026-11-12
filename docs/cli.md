@@ -1,100 +1,30 @@
-# Dokumentacja API: CLI `gaska`
+# CLI
 
-Żółta-Gąska jest wyposażona w potężne narzędzie wiersza poleceń o nazwie `gaska`, które jest Twoim głównym asystentem podczas tworzenia i zarządzania aplikacją. Wszystkie komendy są wywoływane za pomocą `php gaska [komenda]`.
+| Komenda | Działanie |
+| --- | --- |
+| php gaska help | Pomoc |
+| php gaska db:migrate | Migracje z database/migrations; wykonane pliki zapisuje tabela migrations |
+| php gaska db:seed | Dwa przykładowe wpisy, tylko gdy posts jest puste |
+| php gaska serve | Lokalny serwer PHP, domyślnie 127.0.0.1:8000 |
+| npm run dev / php gaska dev | PHP + Vite w jednym terminalu; Ctrl+C kończy oba |
+| php gaska serve --dev | Sam PHP z zasobami Vite; osobno npm run dev:vite |
+| npm run demo | Migracje, seed, build i lokalny serwer |
+| npm test | Testy PHP i izolowanej bazy |
+| npm run test:http | Integracja przez PHP-CGI |
+| npm run test:runtime | Supervisor i integracja procesu SSR |
+| npm run test:package | Instalacja i build niezależnego konsumenta pakietu |
+| npm run verify | PHP, build klienta/SSR, runtime, CGI, konsument pakietu |
+| npm run verify:all | verify i E2E |
+| npm run test:e2e | Chromium, HTTP, CRUD i HMR; wymaga Playwright Python |
 
-## Główne Komendy
+serve przyjmuje --host oraz --port, zarówno z =, jak i oddzielną wartością.
+dev dodatkowo przyjmuje --vite-port. Przykład: `npm run dev -- --port=8080 --vite-port=5174`.
+Awaria jednego procesu kończy środowisko z kodem błędu. Po sygnale zakończenia
+supervisor daje procesom 2 sekundy, następnie wymusza zakończenie.
+Konsument pakietu może używać `php vendor/bin/gaska` z katalogu swojej aplikacji.
+Migracje są uruchamiane jawnie; start serwera nie zmienia schematu bazy.
+SQLite: schemat i historia migracji są w transakcji. MySQL DDL wykonuje implicit
+commit; migracje muszą nadawać się do bezpiecznego ponowienia po awarii.
+Nie uruchamiaj migratorów równolegle.
 
-### `serve`
-
-Uruchamia serwer deweloperski z włączonym Hot Module Replacement (HMR).
-
-```bash
-php gaska serve
-```
-
-**Opcje:**
-- `--port <numer>`: Uruchamia serwer na określonym porcie (domyślnie: 8000).
-  ```bash
-  php gaska serve --port 3000
-  ```
-- `--host <adres>`: Określa host, na którym serwer ma nasłuchiwać (domyślnie: `localhost`).
-  ```bash
-  php gaska serve --host 0.0.0.0
-  ```
-
-### `build`
-
-Kompiluje i buduje aplikację do wersji produkcyjnej. Ten proces obejmuje:
-- Generowanie statycznych stron (SSG) za pomocą `getStaticProps`.
-- Optymalizację zasobów front-endowych (JS, CSS) za pomocą Vite.
-- Przygotowanie kodu serwerowego do uruchomienia w trybie produkcyjnym.
-
-```bash
-php gaska build
-```
-
-### `start`
-
-Uruchamia serwer produkcyjny. Ta komenda powinna być wykonana **po** `php gaska build`.
-
-```bash
-php gaska start
-```
-
-Serwer produkcyjny jest zoptymalizowany pod kątem wydajności i nie posiada HMR.
-
-## Generatory Kodu (`make`)
-
-Komendy `make` służą do szybkiego tworzenia boilerplate'u dla różnych części aplikacji.
-
-### `make:page <nazwa>`
-
-Tworzy nowy komponent strony w katalogu `app/pages`.
-
-```bash
-# Stworzy plik app/pages/contact.jsx
-php gaska make:page contact
-
-# Stworzy plik app/pages/user/profile.jsx
-php gaska make:page user/profile
-```
-
-### `make:api <nazwa>`
-
-Tworzy nowy endpoint API w katalogu `app/pages/api`.
-
-```bash
-# Stworzy plik app/pages/api/submit-form.php
-php gaska make:api submit-form
-```
-
-## Baza Danych
-
-Komendy związane z bazą danych i systemem migracji.
-
-### `db:migrate`
-
-Uruchamia wszystkie zaległe migracje bazy danych.
-
-```bash
-php gaska db:migrate
-```
-
-### `make:migration <nazwa>`
-
-Tworzy nowy, pusty plik migracji w katalogu `database/migrations`.
-
-```bash
-php gaska make:migration create_users_table
-```
-
-## Pomoc
-
-### `help`
-
-Wyświetla listę wszystkich dostępnych komend. Możesz również uzyskać pomoc dla konkretnej komendy.
-
-```bash
-# Wyświetla pomoc dla komendy `serve`
-php gaska help serve
-```
+Nie ma komend make:*, rollback ani produkcyjnego serwera gaska start.

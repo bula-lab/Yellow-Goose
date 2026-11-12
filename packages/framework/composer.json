@@ -1,0 +1,22 @@
+{
+    "name": "yellow-goose/framework",
+    "description": "PHP file routing, loaders, database and React SSR runtime",
+    "type": "library",
+    "autoload": {
+        "psr-4": {
+            "ZoltaGaska\\": "src/"
+        }
+    },
+    "require": {
+        "php": ">=8.1",
+        "ext-pdo": "*",
+        "ext-json": "*"
+    },
+    "suggest": {
+        "ext-pdo_sqlite": "SQLite database support",
+        "ext-pdo_mysql": "MySQL database support"
+    },
+    "bin": [
+        "bin/gaska"
+    ]
+}
