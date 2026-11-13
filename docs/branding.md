@@ -52,5 +52,5 @@ Wygenerowany koncept pozostaje oddzielnym plikiem źródłowym.
 
 Sprawdzono poprawność XML SVG, kanał przezroczystości PNG i rozmiary favicon ICO.
 Test CGI potwierdza obecność logo oraz odnośnika favicon w HTML przed JavaScript.
-Kontrola ładowania obrazów przez HTTP jest częścią E2E i pozostaje zablokowana
-w środowisku bez możliwości otwarcia lokalnych portów.
+E2E sprawdza pobieranie favicon i symbolu przez HTTP oraz załadowanie logo w przeglądarce.
+Potwierdzenie wykonania w CI: [akceptacja MVP](mvp.md#akceptacja-w-ci--2026-11-13).

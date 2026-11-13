@@ -7,6 +7,7 @@
 
 Framework PHP + React: routing plikowy, loadery PHP, JSON API, ORM i SSR.
 Rdzeń jest pakietem Composer w `packages/framework/`.
+MVP zamknięte 2026-11-13: [zakres i akceptacja](docs/mvp.md).
 Demonstracja: notatnik z listą, szczegółami, dodawaniem, edycją, usuwaniem i paginacją.
 
 ## Uruchomienie
@@ -159,4 +160,4 @@ Wbudowany serwer PHP służy do developmentu. Przy innym serwerze document root 
 wskazywać `public/`; żądania aplikacji kieruj do index.php i blokuj pliki ukryte,
 w szczególności `public/build/.vite/`.
 
-[Plan i status](docs/mvp.md) · [Pierwotna wizja](docs/vision.md)
+[Zamknięcie MVP](docs/mvp.md) · [Pierwotna wizja](docs/vision.md)

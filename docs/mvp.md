@@ -1,4 +1,4 @@
-# Plan MVP Yellow-Goose
+# Zamknięcie MVP Yellow-Goose
 
 ## Status realizacji — MVP zamknięte 2026-11-13
 
@@ -23,15 +23,6 @@ commit `9d0986741567aa4918ad214f4b9c6b100e9aad3d`, wszystkie cztery zadania zako
 
 Nie ma otwartych kryteriów akceptacji w uzgodnionym zakresie MVP.
 Instrukcje uruchomienia i powtórzenia kontroli znajdują się w README.
-
-## Ponowna realizacja — 2026-11-12
-
-- Logo wdrożone w aplikacji i README; źródła i eksporty: [branding](branding.md).
-- E2E czeka na efekt React potwierdzający gotowość klienta, zanim zacznie obsługiwać formularze.
-- Workflow obsługuje także ręczne uruchomienie przez workflow_dispatch.
-- `npm run verify`: PASS — 145 asercji PHP, 37 CGI, 20 SSR, 4 testy supervisora,
-  build klienta i SSR oraz instalacja frameworka w niezależnym projekcie.
-- Czyste `composer install` ponownie przeszło w tymczasowym katalogu.
 
 ## Akceptacja w CI — 2026-11-13
 
@@ -81,19 +72,7 @@ Demonstracją jest lokalny panel wpisów: lista, szczegóły, dodawanie, edycja 
 SQLite upraszcza pierwsze uruchomienie; MySQL pozostaje osobnym sprawdzanym wariantem.
 To MVP do rozwoju i lokalnej demonstracji, nie deklaracja gotowości do publicznego wdrożenia.
 
-## Punkt wyjścia przed realizacją
-
-- React 19.3.1, React DOM 19.3.1, Vite 8.3.8 i plugin-react 6.3.0 są zainstalowane.
-- Build i 47 asercji PHP przeszły; nie wykonano jeszcze testu w rzeczywistej przeglądarce.
-- Są routing plikowy, CSR, manifest zasobów, JSON API, strona dynamiczna i konfiguracja HMR.
-- Dane strony są zaszyte w `Application`; brak niezależnej logiki pobierania danych dla stron.
-- `Request` przechowuje tylko URI i metodę; brak parsowania JSON, query i nagłówków.
-- Konfiguracja wymienia SQLite, ale `Connection` buduje DSN i odczytuje pola jak dla MySQL.
-- Brak ładowania `.env`, a port MySQL nie jest używany przy tworzeniu połączenia.
-- ORM ignoruje `$fillable`, nie sprawdza nazw kolumn/operatorów i nie ma `destroy()`.
-- `node_modules` nadal jest śledzone w Git; samo dopisanie do `.gitignore` tego nie zmieniło.
-
-## Kolejność prac
+## Zrealizowane etapy
 
 | Etap | Zakres | Kryterium ukończenia |
 | --- | --- | --- |
@@ -105,11 +84,7 @@ To MVP do rozwoju i lokalnej demonstracji, nie deklaracja gotowości do publiczn
 | 5. Powtarzalne uruchomienie | CI: czysta instalacja, testy PHP, build i E2E; wymagania PHP/rozszerzeń w Composerze; usunięcie zależności z indeksu Git bez usuwania ich lokalnie; aktualizacja dokumentacji | Inny programista uruchamia przykład zgodnie z README bez ręcznych zmian w kodzie; CI potwierdza cały scenariusz |
 | 6. Logo frameworka | Projekt znaku Yellow-Goose / Żółta-Gąska z motywem żółtej gąski; wariant samego symbolu i z nazwą; wersje na jasne i ciemne tło; pliki SVG i PNG z przezroczystością oraz favicon; dodanie do aplikacji demonstracyjnej i README | Logo jest czytelne także jako mała ikona, pliki źródłowe i eksporty są w repozytorium, a aplikacja i README używają spójnego znaku |
 
-Etap 5 częściowo towarzyszy poprzednim: testy i dokumentację dodajemy razem z funkcjami.
-Nie rozbudowujemy ORM ponad metody rzeczywiście wymagane przez przykład.
-Same testy PHP nie zastępują testów formularzy, trwałości danych ani faktycznej przeglądarki.
-
-## Warunki uznania MVP za gotowe
+## Spełnione warunki akceptacji
 
 - Czyste `composer install` i `npm ci`, przygotowanie bazy, build i start według README.
 - Strony i endpointy dodaje się w aplikacji, bez zmian w `packages/framework/src/`.
@@ -128,9 +103,3 @@ system kont i ról oraz rozbudowane generatory CLI.
 Logowanie i autoryzacja zasobów stają się wymagane przed użyciem panelu
 jako publicznej aplikacji z prywatnymi danymi lub wieloma użytkownikami.
 SSR zostało wybrane i zaimplementowane w kolejnym etapie opisanym powyżej.
-
-## Pierwotnie zaplanowany pierwszy przyrost (zaimplementowany)
-
-Najpierw potwierdzenie obecnego UI w przeglądarce, następnie konfiguracja SQLite,
-inicjalizacja tabeli `posts`, obsługa JSON w `Request` i dodawanie wpisu z walidacją.
-Pierwszy przyrost kończy się formularzem, który faktycznie zapisuje wpis i pokazuje go na liście.
