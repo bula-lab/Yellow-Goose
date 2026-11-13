@@ -48,31 +48,23 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: shivammathur/setup-php@v2
-        with:
-          php-version: '8.5'
-          extensions: pdo_sqlite, mbstring
-          coverage: none
-      # setup-php already installs and selects the matching CGI binary.
-      # Its cached PHP builds do not require the runner's apt sources to contain PHP 8.5.
-      - name: Verify PHP CGI runtime
+      - name: Build PHP V8Js and browser test environment
+        run: docker build --target test -t yellow-goose-test -f tests/docker/V8Js.Dockerfile .
+      - name: Clean install, verification and Chromium E2E
         run: |
-          php-cgi --version
-          php-cgi -m | grep -Fx pdo_sqlite
-          php-cgi -m | grep -Fx mbstring
-      - uses: actions/setup-node@v4
-        with:
-          node-version-file: .nvmrc
-          cache: npm
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.12'
-      - run: composer install --no-interaction --prefer-dist
-      - run: npm ci
-      - run: npm run verify
-      - run: python -m pip install -r requirements-dev.txt
-      - run: python -m playwright install --with-deps chromium
-      - run: python tests/e2e.py
+          docker run --rm --shm-size=1g -v "$PWD:/app" yellow-goose-test sh -ec '
+            composer install --no-interaction --prefer-dist
+            npm ci
+            npm run verify:all
+          '
+      - name: Verify SSR and CGI without Node or child-process execution
+        run: |
+          docker build --target runtime -t yellow-goose-runtime -f tests/docker/V8Js.Dockerfile .
+          docker run --rm -v "$PWD:/app:ro" yellow-goose-runtime sh -ec '
+            ! command -v node
+            php -d disable_functions=proc_open,popen,exec,shell_exec,system,passthru tests/ssr.php
+            python3 tests/cgi.py
+          '
       - uses: actions/upload-artifact@v4
         if: always()
         with:

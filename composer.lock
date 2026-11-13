@@ -12,7 +12,7 @@
             "dist": {
                 "type": "path",
                 "url": "packages/framework",
-                "reference": "8a46cb53a6c99a93b147e32978f2588e74fbc697"
+                "reference": "ed31cf3ddbd241e1fe0e52d7e4ffc72a02eedc3e"
             },
             "require": {
                 "ext-json": "*",
@@ -21,7 +21,8 @@
             },
             "suggest": {
                 "ext-pdo_mysql": "MySQL database support",
-                "ext-pdo_sqlite": "SQLite database support"
+                "ext-pdo_sqlite": "SQLite database support",
+                "ext-v8js": "React SSR inside PHP without Node.js on the server"
             },
             "bin": [
                 "bin/gaska"

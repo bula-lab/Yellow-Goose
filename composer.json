@@ -18,7 +18,7 @@
         "ext-pdo_mysql": "For MySQL connections"
     },
     "scripts": {
-        "test": "php tests/run.php"
+        "test": "php tests/run.php && php tests/navigation.php"
     },
     "type": "project",
     "repositories": [

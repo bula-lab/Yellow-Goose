@@ -6,14 +6,14 @@
   "scripts": {
     "dev": "php gaska dev",
     "build": "npm run build:client && npm run build:ssr",
-    "test": "php tests/run.php",
+    "test": "php tests/run.php && php tests/navigation.php",
     "test:e2e": "python3 tests/e2e.py",
     "demo": "php gaska db:migrate && php gaska db:seed && npm run build && php gaska serve",
     "test:http": "python3 tests/cgi.py",
     "dev:vite": "vite",
     "build:client": "vite build",
     "build:ssr": "vite build --ssr app/server.jsx",
-    "test:runtime": "node --test tests/dev.test.mjs && php tests/ssr.php",
+    "test:runtime": "node --test tests/*.test.mjs && php tests/ssr.php",
     "test:package": "python3 tests/package.py",
     "verify": "npm test && npm run build && npm run test:runtime && npm run test:http && npm run test:package",
     "verify:all": "npm run verify && npm run test:e2e"

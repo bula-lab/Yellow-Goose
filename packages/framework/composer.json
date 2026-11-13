@@ -13,6 +13,7 @@
         "ext-json": "*"
     },
     "suggest": {
+        "ext-v8js": "React SSR inside PHP without Node.js on the server",
         "ext-pdo_sqlite": "SQLite database support",
         "ext-pdo_mysql": "MySQL database support"
     },

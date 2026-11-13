@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import Layout from '../../components/Layout';
 import { api } from '../../lib/api';
+import { navigate } from '../../lib/navigation';
 export default function PostPage({ post, csrfToken, saved = false }) {
     const [deleting, setDeleting] = useState(false);
     const [error, setError] = useState('');
@@ -9,7 +10,7 @@ export default function PostPage({ post, csrfToken, saved = false }) {
         setDeleting(true); setError('');
         try {
             await api('/api/posts/' + post.id, { method: 'DELETE', csrfToken });
-            window.location.assign('/?deleted=1');
+            await navigate('/?deleted=1');
         } catch (error) { setError(error.message); setDeleting(false); }
     }
     return <Layout>

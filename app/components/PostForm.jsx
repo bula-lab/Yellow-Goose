@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { api } from '../lib/api';
+import { navigate } from '../lib/navigation';
 
 export default function PostForm({ post, csrfToken }) {
     const [title, setTitle] = useState(post?.title || '');
@@ -17,7 +18,7 @@ export default function PostForm({ post, csrfToken }) {
             const result = await api(post ? '/api/posts/' + post.id : '/api/posts', {
                 method: post ? 'PATCH' : 'POST', data: { title, content }, csrfToken,
             });
-            window.location.assign('/posts/' + result.post.id + '?saved=1');
+            await navigate('/posts/' + result.post.id + '?saved=1');
         } catch (error) {
             setErrors(error.errors || {});
             setError(error.message);

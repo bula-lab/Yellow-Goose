@@ -9,6 +9,14 @@ class Assets
         private ?string $devServer = null,
     ) {}
 
+    public function version(): string
+    {
+        if ($this->devServer) return 'development';
+        $manifest = $this->buildDirectory . '/.vite/manifest.json';
+        if (!is_file($manifest)) throw new \RuntimeException('Missing frontend manifest.');
+        return hash_file('sha256', $manifest);
+    }
+
     public function tags(): string
     {
         if ($this->devServer) {

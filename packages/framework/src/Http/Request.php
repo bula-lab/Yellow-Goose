@@ -6,6 +6,7 @@ class Request
     public const MAX_BODY_BYTES = 1048576;
     public readonly string $uri;
     public readonly string $method;
+    public readonly string $url;
     private array $query = [];
     private array $headers = [];
 
@@ -14,6 +15,7 @@ class Request
         $path = parse_url($uri, PHP_URL_PATH);
         if (!is_string($path) || !str_starts_with($path, '/')) throw new HttpException(400, 'Nieprawidłowy adres.');
         $this->uri = $path;
+        $this->url = $path . (($query = parse_url($uri, PHP_URL_QUERY)) !== null ? '?' . $query : '');
         $this->method = strtoupper($method);
         parse_str(parse_url($uri, PHP_URL_QUERY) ?: '', $this->query);
         foreach ($headers as $name => $value) $this->headers[strtolower($name)] = (string) $value;

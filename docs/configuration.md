@@ -24,7 +24,9 @@ do nieistniejących ikon demonstracji.
 GASKA_VITE_DEV_SERVER jest ustawiane przez `npm run dev` (PHP + Vite)
 lub `php gaska serve --dev` (tylko PHP). Wybiera CSR z HMR.
 GASKA_SSR=0 jawnie wyłącza SSR dla builda; domyślnie SSR jest włączone.
-GASKA_NODE_BINARY wskazuje Node (domyślnie node z PATH).
+SSR wymaga rozszerzenia PHP V8Js; nie korzysta z binarki Node.
+GASKA_NODE_BINARY opcjonalnie wskazuje Node wyłącznie dla supervisora developmentu
+(domyślnie node z PATH).
 Supervisor przekazuje GASKA_VITE_PORT do konfiguracji Vite; port wybierasz
 przez `npm run dev -- --vite-port=5174`.
 GASKA_SESSION_PATH opcjonalnie wskazuje istniejący zapisywalny katalog sesji;

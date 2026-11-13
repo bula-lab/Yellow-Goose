@@ -60,8 +60,9 @@ Wszystkie cztery punkty mają potwierdzenie w zielonym CI wskazanym powyżej.
 - [x] Faktyczne przejście E2E, hydracji i HMR w Chromium.
 - [x] MySQL oraz pełny zdalny workflow CI: PASS.
 
-SSR dotyczy builda; development używa CSR z HMR. Jeden proces Node na żądanie
-jest pierwszą implementacją, bez streamingu i puli workerów.
+Pierwotna akceptacja dotyczyła SSR przez Node. Po zamknięciu MVP renderer zmieniono
+na V8Js, a nawigację rozszerzono o przejścia bez przeładowania dokumentu.
+Bieżący kontrakt i wymagania opisują dokumenty poniżej; development nadal używa CSR z HMR.
 Dokumentacja: [pakiet](framework-package.md), [SSR](ssr.md).
 
 ## Cel i granice

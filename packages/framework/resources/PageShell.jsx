@@ -10,9 +10,10 @@ class PageErrorBoundary extends Component {
     }
 }
 
-export default function PageShell({ Page, props }) {
+export default function PageShell({ Page, props, onReady }) {
     useEffect(() => {
         document.getElementById('app').dataset.clientReady = 'true';
-    }, []);
+        onReady?.();
+    }, [onReady]);
     return <StrictMode><PageErrorBoundary><Page {...props} /></PageErrorBoundary></StrictMode>;
 }

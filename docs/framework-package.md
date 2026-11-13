@@ -40,6 +40,9 @@ require __DIR__ . '/vendor/autoload.php';
 ZoltaGaska\Runtime::boot(__DIR__);
 ```
 
+SSR wymaga rozszerzenia PHP V8Js. Node i npm służą wyłącznie do builda i developmentu.
+Gotowy bundle SSR zawiera wszystkie zależności JavaScript; node_modules nie jest potrzebne na serwerze.
+
 Runtime ładuje .env i opcjonalne config/database.php.
 Connection nie odczytuje konfiguracji przez ścieżki względem katalogu pakietu.
 Aplikacja bez bazy nie potrzebuje konfiguracji; użycie ORM bez niej daje jawny błąd.

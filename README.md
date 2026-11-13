@@ -12,8 +12,10 @@ Demonstracja: notatnik z listą, szczegółami, dodawaniem, edycją, usuwaniem i
 
 ## Uruchomienie
 
-PHP 8.1+ z PDO, pdo_sqlite i mbstring, Composer, Node 24 LTS i npm.
-SSR wymaga Node podczas obsługi żądań oraz dostępnego proc_open w PHP.
+PHP 8.1+ z PDO, pdo_sqlite i mbstring oraz Composer. SSR wymaga rozszerzenia PHP V8Js.
+Node 24 LTS i npm są potrzebne wyłącznie do developmentu i builda.
+Serwer z gotowym buildem nie potrzebuje Node ani node_modules.
+Gotowe środowisko PHP/V8Js i instrukcje testowania: [SSR](docs/ssr.md#środowisko-docker).
 UI: React / React DOM 19.3.1, Vite 8.3.8, plugin-react 6.3.0.
 
 Pierwsza instalacja:
@@ -52,13 +54,14 @@ Opcjonalną konfigurację opisuje .env.example; nie nadpisuj istniejącego .env.
 | Tryb | Działanie |
 | --- | --- |
 | `npm run dev` | CSR + Vite HMR |
-| `npm run build` + `php gaska serve` | PHP loader → React SSR w Node → HTML → hydracja |
+| `npm run build` + `php gaska serve` | PHP loader → React SSR w V8Js → HTML → hydracja |
 | `GASKA_SSR=0 php gaska serve` | Jawne wyłączenie SSR, frontend z builda |
 
 SSR zwraca treść przed wykonaniem JavaScript. Formularze i przyciski wymagają hydracji.
-Pierwsza wersja uruchamia proces Node na każde żądanie strony, z timeoutem 5 s
-i limitami danych. Nie ma jeszcze puli workerów ani streamingu.
-API nie zależy od dostępności builda SSR.
+SSR używa osobnego kontekstu V8 w PHP, z limitem 5 s i 64 MiB pamięci.
+Nie ma streamingu. Brak V8Js daje HTTP 503; GASKA_SSR=0 jawnie wybiera CSR.
+Po hydracji linki i przekierowania formularzy korzystają z nawigacji bez przeładowania.
+API i nawigacja JSON nie zależą od dostępności renderera SSR.
 
 ## Struktura
 
@@ -104,7 +107,7 @@ Mutacje wymagają sesji i nagłówka X-CSRF-Token. Token trafia do props strony.
 
 ## Testy
 
-Kontrole bez portów sieciowych (Python 3, php-cgi i Node):
+Kontrole bez portów sieciowych (PHP z V8Js, Python 3, php-cgi i Node do builda):
 
 ```sh
 npm run verify
@@ -130,10 +133,11 @@ E2E wybiera wolne porty i uruchamia serwery w tymczasowej kopii projektu.
 Sprawdza SSR bez JS, hydrację, CRUD, trwałość po restarcie, błędy, mobile
 i HMR przez pojedynczą komendę development. Zrzuty i trace: `test-results/`.
 
-Workflow [tests.yml](.github/workflows/tests.yml): PHP 8.1/8.5, MySQL 8.4,
-czysta instalacja npm, verify oraz Chromium E2E.
+Workflow [tests.yml](.github/workflows/tests.yml): PHP 8.1/8.5 i MySQL 8.4;
+pełne verify i Chromium E2E w obrazie PHP 8.4/V8Js; osobna kontrola SSR i CGI
+w obrazie bez Node. Obraz testowy i runtime opisuje [dokumentacja SSR](docs/ssr.md).
 
-### Weryfikacja MVP — 2026-11-13
+### Historyczna akceptacja MVP — 2026-11-13
 
 MVP oraz rozszerzenia development/pakiet/SSR są wdrożone i zaakceptowane.
 [MVP tests #2](https://github.com/bula-lab/Yellow-Goose/actions/runs/43381861459)
@@ -149,7 +153,8 @@ dla commita `9d0986741567aa4918ad214f4b9c6b100e9aad3d`: **wszystkie cztery zadan
 - Czyste composer install i npm ci na runnerze CI: PASS.
 - node_modules nie jest śledzone w Git.
 
-Wyniki powyżej pochodzą z wykonanego CI. Wcześniejsze ograniczenia lokalnego
+Wyniki powyżej dotyczą historycznego commita wskazanego w tej sekcji, przed zmianą SSR na V8Js.
+Wyniki pochodzą z wykonanego CI. Wcześniejsze ograniczenia lokalnego
 sandboxa zostały rozstrzygnięte przez wykonanie testów na GitHub Actions.
 
 ## Granice

@@ -137,9 +137,15 @@ def main():
                     assert page.request.head(base + "/api/hello").body() == b""
                     assert page.request.post(base + "/api/posts", data={"title": "blocked", "content": "blocked"}).status == 403
 
+                    # Navigation must preserve this document, including after mutations.
+                    page.evaluate("window.__navigationMarker = 'same-document'")
+                    navigation_responses = []
+                    page.on("response", lambda response: navigation_responses.append(response.status)
+                            if response.headers.get("x-yg-navigation") == "1" else None)
                     # Empty form validation, creation, dynamic refresh and editing.
                     page.get_by_role("link", name="Nowy wpis", exact=True).click()
                     expect(page.get_by_role("heading", name="Dodaj wpis")).to_be_visible()
+                    assert page.evaluate("window.__navigationMarker") == "same-document"
                     expect_client_ready(page)
                     page.get_by_role("button", name="Zapisz wpis").click()
                     expect(page.locator("#title-error")).to_have_text("To pole jest wymagane.")
@@ -149,11 +155,20 @@ def main():
                     page.get_by_role("button", name="Zapisz wpis").click()
                     expect(page.get_by_role("heading", name="Przeglądarkowy wpis", exact=True)).to_be_visible()
                     expect_client_ready(page)
+                    assert page.evaluate("window.__navigationMarker") == "same-document", "save reloaded the document"
+                    assert navigation_responses.count(200) >= 2
+                    page.go_back()
+                    expect(page.get_by_role("heading", name="Dodaj wpis")).to_be_visible()
+                    expect(page.get_by_label("Tytuł", exact=True)).to_have_value("")
+                    page.go_forward()
+                    expect(page.get_by_role("heading", name="Przeglądarkowy wpis", exact=True)).to_be_visible()
+                    assert page.evaluate("window.__navigationMarker") == "same-document", "history reloaded the document"
                     detail_url = page.url.split("?")[0]
                     page.reload()
                     expect(page.get_by_role("heading", name="Przeglądarkowy wpis", exact=True)).to_be_visible()
                     expect_client_ready(page)
                     expect(page.locator(".post-content")).to_contain_text("<script>alert(1)</script>")
+                    page.evaluate("window.__navigationMarker = 'same-document'")
                     page.get_by_role("link", name="Edytuj wpis", exact=True).click()
                     expect(page.get_by_label("Tytuł", exact=True)).to_have_value("Przeglądarkowy wpis")
                     expect_client_ready(page)
@@ -162,6 +177,7 @@ def main():
                     expect(page.get_by_role("heading", name="Zmieniony w przeglądarce")).to_be_visible()
                     expect_client_ready(page)
 
+                    assert page.evaluate("window.__navigationMarker") == "same-document", "edit reloaded the document"
                     # Persistence across an actual PHP process restart.
                     stop(php)
                     php = start_php()
@@ -169,6 +185,7 @@ def main():
                     expect(page.get_by_role("heading", name="Zmieniony w przeglądarce")).to_be_visible()
                     expect_client_ready(page)
 
+                    page.evaluate("window.__navigationMarker = 'same-document'")
                     # Error recovery: failed deletion keeps record and re-enables button.
                     def fail_delete(route):
                         route.fulfill(status=500, content_type="application/json", body='{"error":"Testowy błąd serwera"}')
@@ -183,8 +200,46 @@ def main():
                     expect(page.get_by_role("heading", name="Wpisy", exact=True)).to_be_visible()
                     expect_client_ready(page)
                     expect(page.get_by_role("status")).to_contain_text("Wpis został usunięty.")
+                    assert page.evaluate("window.__navigationMarker") == "same-document", "delete reloaded the document"
                     assert page.request.get(detail_url).status == 404
                     assert page.request.get(base + "/api/posts/999999").status == 404
+
+                    # An unavailable network keeps the current page and allows retry.
+                    def fail_navigation(route):
+                        route.abort("failed")
+                    page.route("**/posts/new", fail_navigation)
+                    page.get_by_role("link", name="Nowy wpis", exact=True).click()
+                    expect(page.locator(".navigation-status")).to_have_attribute("role", "alert")
+                    expect(page.get_by_role("heading", name="Wpisy", exact=True)).to_be_visible()
+                    assert page.evaluate("window.__navigationMarker") == "same-document"
+                    page.unroute("**/posts/new", fail_navigation)
+                    page.get_by_role("link", name="Nowy wpis", exact=True).click()
+                    expect(page.get_by_role("heading", name="Dodaj wpis")).to_be_visible()
+                    page.get_by_role("link", name="Anuluj", exact=True).click()
+                    expect(page.get_by_role("heading", name="Wpisy", exact=True)).to_be_visible()
+
+                    # Modified clicks retain native new-tab behavior.
+                    with context.expect_page() as popup_info:
+                        page.get_by_role("link", name="Nowy wpis", exact=True).click(modifiers=["ControlOrMeta"])
+                    popup_info.value.wait_for_load_state()
+                    popup_info.value.close()
+                    expect(page.get_by_role("heading", name="Wpisy", exact=True)).to_be_visible()
+
+                    # A changed build reloads the document to fetch matching chunks.
+                    def changed_version(route):
+                        if route.request.headers.get("x-yg-navigation") == "1":
+                            route.fulfill(status=409, content_type="application/json",
+                                          headers={"X-YG-Navigation": "1"},
+                                          body='{"location":"/posts/new","reload":true}')
+                        else:
+                            route.continue_()
+                    page.route("**/posts/new", changed_version)
+                    page.get_by_role("link", name="Nowy wpis", exact=True).click()
+                    expect(page.get_by_role("heading", name="Dodaj wpis")).to_be_visible()
+                    assert page.evaluate("typeof window.__navigationMarker") == "undefined"
+                    page.unroute("**/posts/new", changed_version)
+                    page.get_by_role("link", name="Anuluj", exact=True).click()
+                    expect(page.get_by_role("heading", name="Wpisy", exact=True)).to_be_visible()
 
                     # Mobile layout has no horizontal overflow.
                     page.set_viewport_size({"width": 390, "height": 844})
@@ -212,7 +267,7 @@ def main():
                     expect(page.get_by_role("heading", name="Wpisy HMR", exact=True)).to_be_visible(timeout=15000)
                     assert page.evaluate("window.__gaskaHmrMarker") == "keep-me", "HMR caused a full reload"
                     assert not errors, errors
-                    print("PASS: SSR without JS, hydration, CRUD, validation, CSRF, API, persistence, errors, mobile and one-command HMR")
+                    print("PASS: V8Js SSR without JS, hydration, same-document CRUD, history, network recovery, native links, build reload, CSRF, persistence, mobile and HMR")
                 finally:
                     context.tracing.stop(path=str(artifacts / "e2e-trace.zip"))
                     browser.close()
