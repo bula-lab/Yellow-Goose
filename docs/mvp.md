@@ -1,6 +1,10 @@
 # Plan MVP Yellow-Goose
 
-## Status realizacji
+## Status realizacji — MVP zamknięte 2026-11-13
+
+Etapy 0–6 oraz uzgodnione rozszerzenia (jedna komenda development, pakiet i SSR)
+są wdrożone i zweryfikowane. Podstawa akceptacji: [MVP tests #2](https://github.com/bula-lab/Yellow-Goose/actions/runs/43381861459),
+commit `9d0986741567aa4918ad214f4b9c6b100e9aad3d`, wszystkie cztery zadania zakończone sukcesem.
 
 - [x] Konfiguracja .env, SQLite/MySQL, migrator i seed.
 - [x] Request JSON/query/nagłówki, walidacja, odpowiedzi błędów.
@@ -10,16 +14,15 @@
 - [x] 145 asercji PHP/SQLite oraz 37 asercji rzeczywistego entry pointu PHP-CGI.
 - [x] Build na nowych bibliotekach UI; instalacja Composer z lockfile.
 - [x] Instalacja Composer i testy PHP w czystej kopii źródeł.
-- [ ] Czyste npm ci: brak dostępu do rejestru i niekompletny cache (ENOTCACHED).
+- [x] Czyste npm ci w CI.
 - [x] Skrypt przeglądarkowy (CRUD, restart, błędy, mobile, HMR) i workflow CI.
-- [ ] Wykonanie E2E: lokalny sandbox odmawia otwarcia portu HTTP.
-- [ ] Wykonanie integracji MySQL i zdalnego CI; workflow nie został opublikowany/uruchomiony.
-- [ ] Usunięcie node_modules z indeksu: zapis .git/index.lock jest zabroniony.
+- [x] Wykonanie E2E w Chromium: SSR bez JS, hydracja, CRUD, walidacja, CSRF, API, trwałość po restarcie, błędy, mobile i HMR.
+- [x] Integracja MySQL 8.4 oraz zdalne CI, w tym PHP 8.1 i 8.5.
+- [x] Usunięcie node_modules z indeksu: git ls-files node_modules zwraca zero plików.
 - [x] Etap 6: logo Yellow-Goose — wektorowe SVG, przezroczyste PNG, jasny/ciemny wariant, favicon, integracja aplikacji i README.
 
-Kod zakresu MVP jest przygotowany, ale pełna akceptacja wymaga zielonego E2E
-oraz sprawdzenia CI. Nie należy utożsamiać gotowego skryptu testowego z jego zaliczeniem.
-Instrukcje uruchomienia i dokończenia kontroli znajdują się w README.
+Nie ma otwartych kryteriów akceptacji w uzgodnionym zakresie MVP.
+Instrukcje uruchomienia i powtórzenia kontroli znajdują się w README.
 
 ## Ponowna realizacja — 2026-11-12
 
@@ -30,25 +33,29 @@ Instrukcje uruchomienia i dokończenia kontroli znajdują się w README.
   build klienta i SSR oraz instalacja frameworka w niezależnym projekcie.
 - Czyste `composer install` ponownie przeszło w tymczasowym katalogu.
 
-**Nadal niezaliczone kryteria:**
+## Akceptacja w CI — 2026-11-13
 
-| Kryterium | Aktualna przeszkoda |
+| Kryterium | Wynik i dowód |
 | --- | --- |
-| Czyste npm ci | Rejestr npm niedostępny; próba offline kończy się ENOTCACHED dla picocolors 1.1.1 |
-| E2E, hydracja i HMR w przeglądarce | Otwarcie lokalnego portu kończy się Operation not permitted |
-| Integracja MySQL | Brak lokalnego mysqld i brak dostępu do gniazda Dockera |
-| Zdalne CI | Origin wskazuje bula-lab/yellow-goose; uruchomienie workflow dla tych zmian nie jest jeszcze potwierdzone |
-| Usunięcie node_modules z indeksu | Katalog .git jest tylko do odczytu w uprawnieniach sesji |
+| Czysta instalacja | PASS: composer install i npm ci w zadaniu browser |
+| PHP 8.1 i 8.5 | PASS: oba zadania macierzy PHP |
+| SQLite i MySQL 8.4 | PASS: po 145 asercji dla każdego sterownika |
+| npm run verify | PASS: PHP, build klienta i SSR, 4 testy supervisora, 20 asercji SSR, 37 CGI oraz niezależny konsument pakietu |
+| E2E, hydracja i HMR | PASS: python tests/e2e.py, pełny scenariusz Chromium bez pominięcia kroku |
+| Artefakty przeglądarkowe | PASS: krok upload-artifact, artefakt browser-results |
+| Usunięcie node_modules z indeksu | PASS: zero śledzonych plików zależności |
 
-Do zamknięcia planu potrzebne jest środowisko umożliwiające sieć, nasłuch HTTP,
-MySQL/Docker i zapis indeksu Git oraz zaliczenie CI w repozytorium bula-lab/yellow-goose.
-Nie uznajemy blokady środowiska ani przygotowania skryptu za pozytywny wynik testu.
+Logi: [browser](https://github.com/bula-lab/Yellow-Goose/actions/runs/43381861459/job/131741235236),
+[MySQL](https://github.com/bula-lab/Yellow-Goose/actions/runs/43381861459/job/131741234929).
+Poprawka CI usunęła instalowanie niedostępnego pakietu apt php8.5-cgi;
+workflow sprawdza teraz CGI i rozszerzenia dostarczone przez setup-php.
+Wcześniejsze lokalne ograniczenia sieci, portów i Dockera nie blokują akceptacji:
+wymagane kontrole zostały wykonane na runnerze GitHub Actions.
 
-## Kolejny etap — zrealizowany kod, częściowa akceptacja (2026-11-12)
+## Kolejny etap — wdrożony i zaakceptowany (2026-11-13)
 
 Uzgodniona kolejność: domknięcie testów → jedna komenda development → pakiet → SSR.
-Pierwszego punktu nie można uznać za całkowicie zamknięty bez wykonania E2E i CI.
-Prace implementacyjne pozostałych punktów zostały wykonane; blokady weryfikacji pozostają jawne.
+Wszystkie cztery punkty mają potwierdzenie w zielonym CI wskazanym powyżej.
 
 - [x] `npm run verify` obejmuje PHP, buildy, runtime, CGI i niezależnego konsumenta.
 - [x] `npm run dev` uruchamia PHP + Vite, obsługuje porty i sprzątanie procesów.
@@ -59,8 +66,8 @@ Prace implementacyjne pozostałych punktów zostały wykonane; blokady weryfikac
 - [x] 20 asercji SSR: błędy, limity, timeout, zakończenie procesu i odpowiedzi HTTP.
 - [x] CGI potwierdza HTML przed JS, escapowanie danych i formularze z danymi.
 - [x] E2E rozszerzone o brak JS, hydrację i HMR przez jedną komendę development.
-- [ ] Faktyczne przejście E2E i HMR: sandbox blokuje porty.
-- [ ] MySQL oraz zdalny workflow CI: niewykonane.
+- [x] Faktyczne przejście E2E, hydracji i HMR w Chromium.
+- [x] MySQL oraz pełny zdalny workflow CI: PASS.
 
 SSR dotyczy builda; development używa CSR z HMR. Jeden proces Node na żądanie
 jest pierwszą implementacją, bez streamingu i puli workerów.

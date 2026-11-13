@@ -132,18 +132,24 @@ i HMR przez pojedynczą komendę development. Zrzuty i trace: `test-results/`.
 Workflow [tests.yml](.github/workflows/tests.yml): PHP 8.1/8.5, MySQL 8.4,
 czysta instalacja npm, verify oraz Chromium E2E.
 
-### Lokalna weryfikacja — 2026-11-12
+### Weryfikacja MVP — 2026-11-13
 
-- PHP/SQLite: 145 asercji PASS.
+MVP oraz rozszerzenia development/pakiet/SSR są wdrożone i zaakceptowane.
+[MVP tests #2](https://github.com/bula-lab/Yellow-Goose/actions/runs/43381861459)
+dla commita `9d0986741567aa4918ad214f4b9c6b100e9aad3d`: **wszystkie cztery zadania PASS**.
+
+- PHP 8.1 i 8.5: PASS; SQLite i MySQL 8.4: po 145 asercji PASS.
 - PHP-CGI: 37 asercji PASS, w tym HTML SSR, escapowanie, sesja i CRUD.
 - SSR: 20 asercji PASS, w tym timeout, limity, sprzątanie procesu i błędy.
 - Supervisor: 4 testy PASS, w tym awaria, SIGINT/SIGTERM i wymuszone zakończenie.
 - Build klienta i SSR oraz niezależny konsument Composer: PASS.
-- E2E i start serwerów: **zablokowane przez sandbox** (Operation not permitted przy nasłuchiwaniu).
-- MySQL: Docker odmawia dostępu, brak lokalnego serwera. Repozytorium CI: [bula-lab/yellow-goose](https://github.com/bula-lab/yellow-goose); pełne zielone CI nie jest jeszcze potwierdzone.
-- Czyste npm ci: poprzednia próba offline wykazała niepełny cache (ENOTCACHED); brak dostępu do rejestru.
-- node_modules pozostaje śledzone w Git; zapis .git/index.lock jest zablokowany.
-  Poza tym środowiskiem `git rm -r --cached -- node_modules` usuwa je z indeksu, zachowując pliki lokalnie.
+- Chromium E2E: PASS — SSR bez JS, hydracja, CRUD, walidacja, CSRF, API,
+  trwałość po restarcie serwera, obsługa błędów, mobile i HMR bez przeładowania strony.
+- Czyste composer install i npm ci na runnerze CI: PASS.
+- node_modules nie jest śledzone w Git.
+
+Wyniki powyżej pochodzą z wykonanego CI. Wcześniejsze ograniczenia lokalnego
+sandboxa zostały rozstrzygnięte przez wykonanie testów na GitHub Actions.
 
 ## Granice
 
