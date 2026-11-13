@@ -53,6 +53,13 @@ jobs:
           php-version: '8.5'
           extensions: pdo_sqlite, mbstring
           coverage: none
+      # setup-php already installs and selects the matching CGI binary.
+      # Its cached PHP builds do not require the runner's apt sources to contain PHP 8.5.
+      - name: Verify PHP CGI runtime
+        run: |
+          php-cgi --version
+          php-cgi -m | grep -Fx pdo_sqlite
+          php-cgi -m | grep -Fx mbstring
       - uses: actions/setup-node@v4
         with:
           node-version-file: .nvmrc
@@ -62,7 +69,6 @@ jobs:
           python-version: '3.12'
       - run: composer install --no-interaction --prefer-dist
       - run: npm ci
-      - run: sudo apt-get update && sudo apt-get install -y php8.5-cgi
       - run: npm run verify
       - run: python -m pip install -r requirements-dev.txt
       - run: python -m playwright install --with-deps chromium
