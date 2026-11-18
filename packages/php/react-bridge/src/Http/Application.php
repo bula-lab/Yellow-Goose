@@ -15,14 +15,32 @@ class Application
         private string $csrfToken = '', ?string $loadersPath = null,
         private ?Renderer $renderer = null,
         private array $document = [],
+        private ?Kernel $moduleKernel = null,
     ) {
         $this->pagesPath = rtrim($pagesPath, '/\\');
         $this->loadersPath = $loadersPath ?? dirname($this->pagesPath) . '/loaders';
         $this->router = new Router($this->pagesPath);
+        // Module API namespaces have one owner, including when legacy routes use params.
+        if ($moduleKernel !== null && is_dir($this->pagesPath . '/api')) {
+            $files = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($this->pagesPath . '/api', \FilesystemIterator::SKIP_DOTS));
+            foreach ($files as $file) {
+                if (!$file->isFile() || $file->getExtension() !== 'php') continue;
+                $relative = substr($file->getPathname(), strlen($this->pagesPath . '/api/'));
+                $namespace = explode('/', str_replace('\\', '/', $relative))[0];
+                $namespace = preg_replace('/\.php$/', '', $namespace);
+                foreach ($moduleKernel->prefixes() as $prefix) {
+                    $moduleNamespace = explode('/', trim($prefix, '/'))[1];
+                    if ($namespace === $moduleNamespace || $namespace === 'index' || str_starts_with($namespace, '[')) {
+                        throw new \LogicException('Module route conflicts with file API namespace: ' . $namespace);
+                    }
+                }
+            }
+        }
     }
 
     public function handle(Request $request): Response
     {
+        if ($this->moduleKernel?->matches($request)) return $this->moduleKernel->handle($request);
         $response = $this->respond($request);
         if ($request->uri === '/api' || str_starts_with($request->uri, '/api/')) return $response;
         if ($request->header('X-YG-Navigation') === '1'

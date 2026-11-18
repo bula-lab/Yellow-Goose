@@ -3,7 +3,7 @@ require __DIR__ . '/vendor/autoload.php';
 ZoltaGaska\Runtime::boot(__DIR__);
 if (class_exists('App\\Models\\Post')) throw new RuntimeException('Demo model leaked into consumer.');
 $path = (new ReflectionClass(ZoltaGaska\Http\Application::class))->getFileName();
-if (!str_starts_with($path, __DIR__ . '/vendor/yellow-goose/framework/')) {
+if (!str_starts_with($path, __DIR__ . '/vendor/yellow-goose/react-bridge/')) {
     throw new RuntimeException('Framework was not installed in the consumer vendor directory.');
 }
 $app = ZoltaGaska\Runtime::application(__DIR__);

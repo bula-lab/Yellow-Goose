@@ -1,0 +1,1221 @@
+{
+    "ZoltaGaska\\Config\\Environment": {
+        "methods": {
+            "load": [
+                true,
+                true,
+                [
+                    [
+                        "file",
+                        "string",
+                        false,
+                        false,
+                        null,
+                        false
+                    ]
+                ],
+                "void"
+            ]
+        },
+        "properties": [],
+        "constants": []
+    },
+    "ZoltaGaska\\Console\\Cli": {
+        "methods": {
+            "run": [
+                true,
+                true,
+                [
+                    [
+                        "root",
+                        "string",
+                        false,
+                        false,
+                        null,
+                        false
+                    ],
+                    [
+                        "args",
+                        "array",
+                        false,
+                        false,
+                        null,
+                        false
+                    ]
+                ],
+                "int"
+            ]
+        },
+        "properties": [],
+        "constants": []
+    },
+    "ZoltaGaska\\Database\\Builder": {
+        "methods": {
+            "__construct": [
+                true,
+                false,
+                [
+                    [
+                        "modelClass",
+                        "string",
+                        false,
+                        false,
+                        null,
+                        false
+                    ]
+                ],
+                ""
+            ],
+            "all": [
+                true,
+                false,
+                [],
+                "array"
+            ],
+            "count": [
+                true,
+                false,
+                [],
+                "int"
+            ],
+            "create": [
+                true,
+                false,
+                [
+                    [
+                        "attributes",
+                        "array",
+                        false,
+                        false,
+                        null,
+                        false
+                    ]
+                ],
+                "ZoltaGaska\\Database\\Model"
+            ],
+            "delete": [
+                true,
+                false,
+                [
+                    [
+                        "keyName",
+                        "string",
+                        false,
+                        false,
+                        null,
+                        false
+                    ],
+                    [
+                        "keyValue",
+                        "mixed",
+                        false,
+                        false,
+                        null,
+                        false
+                    ]
+                ],
+                "bool"
+            ],
+            "destroy": [
+                true,
+                false,
+                [
+                    [
+                        "id",
+                        "string|int",
+                        false,
+                        false,
+                        null,
+                        false
+                    ]
+                ],
+                "bool"
+            ],
+            "find": [
+                true,
+                false,
+                [
+                    [
+                        "id",
+                        "string|int",
+                        false,
+                        false,
+                        null,
+                        false
+                    ]
+                ],
+                "?ZoltaGaska\\Database\\Model"
+            ],
+            "first": [
+                true,
+                false,
+                [],
+                "?ZoltaGaska\\Database\\Model"
+            ],
+            "get": [
+                true,
+                false,
+                [],
+                "array"
+            ],
+            "limit": [
+                true,
+                false,
+                [
+                    [
+                        "limit",
+                        "int",
+                        false,
+                        false,
+                        null,
+                        false
+                    ],
+                    [
+                        "offset",
+                        "int",
+                        false,
+                        false,
+                        0,
+                        true
+                    ]
+                ],
+                "ZoltaGaska\\Database\\Builder"
+            ],
+            "orderBy": [
+                true,
+                false,
+                [
+                    [
+                        "column",
+                        "string",
+                        false,
+                        false,
+                        null,
+                        false
+                    ],
+                    [
+                        "direction",
+                        "string",
+                        false,
+                        false,
+                        "asc",
+                        true
+                    ]
+                ],
+                "ZoltaGaska\\Database\\Builder"
+            ],
+            "update": [
+                true,
+                false,
+                [
+                    [
+                        "keyName",
+                        "string",
+                        false,
+                        false,
+                        null,
+                        false
+                    ],
+                    [
+                        "keyValue",
+                        "mixed",
+                        false,
+                        false,
+                        null,
+                        false
+                    ],
+                    [
+                        "attributes",
+                        "array",
+                        false,
+                        false,
+                        null,
+                        false
+                    ]
+                ],
+                "bool"
+            ],
+            "where": [
+                true,
+                false,
+                [
+                    [
+                        "column",
+                        "string",
+                        false,
+                        false,
+                        null,
+                        false
+                    ],
+                    [
+                        "operator",
+                        "mixed",
+                        false,
+                        false,
+                        null,
+                        false
+                    ],
+                    [
+                        "value",
+                        "mixed",
+                        false,
+                        false,
+                        null,
+                        true
+                    ]
+                ],
+                "ZoltaGaska\\Database\\Builder"
+            ]
+        },
+        "properties": [],
+        "constants": []
+    },
+    "ZoltaGaska\\Database\\Connection": {
+        "methods": {
+            "configure": [
+                true,
+                true,
+                [
+                    [
+                        "configuration",
+                        "?array",
+                        false,
+                        false,
+                        null,
+                        false
+                    ]
+                ],
+                "void"
+            ],
+            "disconnect": [
+                true,
+                true,
+                [],
+                "void"
+            ],
+            "dsn": [
+                true,
+                true,
+                [
+                    [
+                        "config",
+                        "array",
+                        false,
+                        false,
+                        null,
+                        false
+                    ]
+                ],
+                "string"
+            ],
+            "getInstance": [
+                true,
+                true,
+                [],
+                "PDO"
+            ]
+        },
+        "properties": [],
+        "constants": []
+    },
+    "ZoltaGaska\\Database\\Migrator": {
+        "methods": {
+            "__construct": [
+                true,
+                false,
+                [
+                    [
+                        "pdo",
+                        "PDO",
+                        false,
+                        false,
+                        null,
+                        false
+                    ],
+                    [
+                        "directory",
+                        "string",
+                        false,
+                        false,
+                        null,
+                        false
+                    ]
+                ],
+                ""
+            ],
+            "migrate": [
+                true,
+                false,
+                [],
+                "array"
+            ]
+        },
+        "properties": [],
+        "constants": []
+    },
+    "ZoltaGaska\\Database\\Model": {
+        "methods": {
+            "__callStatic": [
+                true,
+                true,
+                [
+                    [
+                        "method",
+                        "string",
+                        false,
+                        false,
+                        null,
+                        false
+                    ],
+                    [
+                        "parameters",
+                        "array",
+                        false,
+                        false,
+                        null,
+                        false
+                    ]
+                ],
+                "mixed"
+            ],
+            "__construct": [
+                true,
+                false,
+                [
+                    [
+                        "attributes",
+                        "array",
+                        false,
+                        false,
+                        [],
+                        true
+                    ]
+                ],
+                ""
+            ],
+            "__get": [
+                true,
+                false,
+                [
+                    [
+                        "key",
+                        "string",
+                        false,
+                        false,
+                        null,
+                        false
+                    ]
+                ],
+                "mixed"
+            ],
+            "__set": [
+                true,
+                false,
+                [
+                    [
+                        "key",
+                        "string",
+                        false,
+                        false,
+                        null,
+                        false
+                    ],
+                    [
+                        "value",
+                        "mixed",
+                        false,
+                        false,
+                        null,
+                        false
+                    ]
+                ],
+                "void"
+            ],
+            "delete": [
+                true,
+                false,
+                [],
+                "bool"
+            ],
+            "fill": [
+                true,
+                false,
+                [
+                    [
+                        "attributes",
+                        "array",
+                        false,
+                        false,
+                        null,
+                        false
+                    ]
+                ],
+                "static"
+            ],
+            "getColumns": [
+                true,
+                false,
+                [],
+                "array"
+            ],
+            "getFillable": [
+                true,
+                false,
+                [],
+                "array"
+            ],
+            "getKey": [
+                true,
+                false,
+                [],
+                "mixed"
+            ],
+            "getKeyName": [
+                true,
+                false,
+                [],
+                "string"
+            ],
+            "getTable": [
+                true,
+                false,
+                [],
+                "string"
+            ],
+            "hydrate": [
+                true,
+                true,
+                [
+                    [
+                        "record",
+                        "array",
+                        false,
+                        false,
+                        null,
+                        false
+                    ]
+                ],
+                "static"
+            ],
+            "jsonSerialize": [
+                true,
+                false,
+                [],
+                "array"
+            ],
+            "save": [
+                true,
+                false,
+                [],
+                "bool"
+            ],
+            "toArray": [
+                true,
+                false,
+                [],
+                "array"
+            ]
+        },
+        "properties": {
+            "attributes": [
+                "array",
+                false,
+                false,
+                false
+            ],
+            "columns": [
+                "array",
+                false,
+                false,
+                false
+            ],
+            "fillable": [
+                "array",
+                false,
+                false,
+                false
+            ],
+            "primaryKey": [
+                "string",
+                false,
+                false,
+                false
+            ],
+            "table": [
+                "string",
+                false,
+                false,
+                false
+            ]
+        },
+        "constants": []
+    },
+    "ZoltaGaska\\Frontend\\Assets": {
+        "methods": {
+            "__construct": [
+                true,
+                false,
+                [
+                    [
+                        "buildDirectory",
+                        "string",
+                        false,
+                        false,
+                        null,
+                        false
+                    ],
+                    [
+                        "devServer",
+                        "?string",
+                        false,
+                        false,
+                        null,
+                        true
+                    ]
+                ],
+                ""
+            ],
+            "tags": [
+                true,
+                false,
+                [],
+                "string"
+            ],
+            "version": [
+                true,
+                false,
+                [],
+                "string"
+            ]
+        },
+        "properties": [],
+        "constants": []
+    },
+    "ZoltaGaska\\Frontend\\Renderer": {
+        "methods": {
+            "render": [
+                true,
+                false,
+                [
+                    [
+                        "page",
+                        "string",
+                        false,
+                        false,
+                        null,
+                        false
+                    ],
+                    [
+                        "props",
+                        "array",
+                        false,
+                        false,
+                        null,
+                        false
+                    ]
+                ],
+                "string"
+            ]
+        },
+        "properties": [],
+        "constants": []
+    },
+    "ZoltaGaska\\Frontend\\V8JsRenderer": {
+        "methods": {
+            "__construct": [
+                true,
+                false,
+                [
+                    [
+                        "bundle",
+                        "string",
+                        false,
+                        false,
+                        null,
+                        false
+                    ],
+                    [
+                        "timeoutMs",
+                        "int",
+                        false,
+                        false,
+                        5000,
+                        true
+                    ],
+                    [
+                        "memoryLimit",
+                        "int",
+                        false,
+                        false,
+                        67108864,
+                        true
+                    ],
+                    [
+                        "maxOutput",
+                        "int",
+                        false,
+                        false,
+                        2097152,
+                        true
+                    ]
+                ],
+                ""
+            ],
+            "render": [
+                true,
+                false,
+                [
+                    [
+                        "page",
+                        "string",
+                        false,
+                        false,
+                        null,
+                        false
+                    ],
+                    [
+                        "props",
+                        "array",
+                        false,
+                        false,
+                        null,
+                        false
+                    ]
+                ],
+                "string"
+            ]
+        },
+        "properties": [],
+        "constants": []
+    },
+    "ZoltaGaska\\Http\\Application": {
+        "methods": {
+            "__construct": [
+                true,
+                false,
+                [
+                    [
+                        "pagesPath",
+                        "string",
+                        false,
+                        false,
+                        null,
+                        false
+                    ],
+                    [
+                        "assets",
+                        "ZoltaGaska\\Frontend\\Assets",
+                        false,
+                        false,
+                        null,
+                        false
+                    ],
+                    [
+                        "csrfToken",
+                        "string",
+                        false,
+                        false,
+                        "",
+                        true
+                    ],
+                    [
+                        "loadersPath",
+                        "?string",
+                        false,
+                        false,
+                        null,
+                        true
+                    ],
+                    [
+                        "renderer",
+                        "?ZoltaGaska\\Frontend\\Renderer",
+                        false,
+                        false,
+                        null,
+                        true
+                    ],
+                    [
+                        "document",
+                        "array",
+                        false,
+                        false,
+                        [],
+                        true
+                    ]
+                ],
+                ""
+            ],
+            "handle": [
+                true,
+                false,
+                [
+                    [
+                        "request",
+                        "ZoltaGaska\\Http\\Request",
+                        false,
+                        false,
+                        null,
+                        false
+                    ]
+                ],
+                "ZoltaGaska\\Http\\Response"
+            ]
+        },
+        "properties": [],
+        "constants": []
+    },
+    "ZoltaGaska\\Http\\HttpException": {
+        "methods": {
+            "__construct": [
+                true,
+                false,
+                [
+                    [
+                        "status",
+                        "int",
+                        false,
+                        false,
+                        null,
+                        false
+                    ],
+                    [
+                        "message",
+                        "string",
+                        false,
+                        false,
+                        null,
+                        false
+                    ],
+                    [
+                        "errors",
+                        "array",
+                        false,
+                        false,
+                        [],
+                        true
+                    ],
+                    [
+                        "headers",
+                        "array",
+                        false,
+                        false,
+                        [],
+                        true
+                    ]
+                ],
+                ""
+            ]
+        },
+        "properties": {
+            "errors": [
+                "array",
+                true,
+                false,
+                true
+            ],
+            "headers": [
+                "array",
+                true,
+                false,
+                true
+            ],
+            "status": [
+                "int",
+                true,
+                false,
+                true
+            ]
+        },
+        "constants": []
+    },
+    "ZoltaGaska\\Http\\Request": {
+        "methods": {
+            "__construct": [
+                true,
+                false,
+                [
+                    [
+                        "uri",
+                        "string",
+                        false,
+                        false,
+                        null,
+                        false
+                    ],
+                    [
+                        "method",
+                        "string",
+                        false,
+                        false,
+                        null,
+                        false
+                    ],
+                    [
+                        "headers",
+                        "array",
+                        false,
+                        false,
+                        [],
+                        true
+                    ],
+                    [
+                        "rawBody",
+                        "string",
+                        false,
+                        false,
+                        "",
+                        true
+                    ]
+                ],
+                ""
+            ],
+            "capture": [
+                true,
+                true,
+                [],
+                "ZoltaGaska\\Http\\Request"
+            ],
+            "header": [
+                true,
+                false,
+                [
+                    [
+                        "name",
+                        "string",
+                        false,
+                        false,
+                        null,
+                        false
+                    ],
+                    [
+                        "default",
+                        "?string",
+                        false,
+                        false,
+                        null,
+                        true
+                    ]
+                ],
+                "?string"
+            ],
+            "json": [
+                true,
+                false,
+                [],
+                "array"
+            ],
+            "query": [
+                true,
+                false,
+                [
+                    [
+                        "name",
+                        "string",
+                        false,
+                        false,
+                        null,
+                        false
+                    ],
+                    [
+                        "default",
+                        "mixed",
+                        false,
+                        false,
+                        null,
+                        true
+                    ]
+                ],
+                "mixed"
+            ],
+            "requireMethod": [
+                true,
+                false,
+                [
+                    [
+                        "methods",
+                        "array",
+                        false,
+                        false,
+                        null,
+                        false
+                    ]
+                ],
+                "void"
+            ]
+        },
+        "properties": {
+            "method": [
+                "string",
+                true,
+                false,
+                true
+            ],
+            "uri": [
+                "string",
+                true,
+                false,
+                true
+            ],
+            "url": [
+                "string",
+                true,
+                false,
+                true
+            ]
+        },
+        "constants": {
+            "MAX_BODY_BYTES": 1048576
+        }
+    },
+    "ZoltaGaska\\Http\\Response": {
+        "methods": {
+            "__construct": [
+                true,
+                false,
+                [
+                    [
+                        "body",
+                        "string",
+                        false,
+                        false,
+                        null,
+                        false
+                    ],
+                    [
+                        "status",
+                        "int",
+                        false,
+                        false,
+                        200,
+                        true
+                    ],
+                    [
+                        "headers",
+                        "array",
+                        false,
+                        false,
+                        [],
+                        true
+                    ]
+                ],
+                ""
+            ],
+            "html": [
+                true,
+                true,
+                [
+                    [
+                        "html",
+                        "string",
+                        false,
+                        false,
+                        null,
+                        false
+                    ],
+                    [
+                        "status",
+                        "int",
+                        false,
+                        false,
+                        200,
+                        true
+                    ]
+                ],
+                "ZoltaGaska\\Http\\Response"
+            ],
+            "json": [
+                true,
+                true,
+                [
+                    [
+                        "data",
+                        "array",
+                        false,
+                        false,
+                        null,
+                        false
+                    ],
+                    [
+                        "status",
+                        "int",
+                        false,
+                        false,
+                        200,
+                        true
+                    ],
+                    [
+                        "headers",
+                        "array",
+                        false,
+                        false,
+                        [],
+                        true
+                    ]
+                ],
+                "ZoltaGaska\\Http\\Response"
+            ],
+            "send": [
+                true,
+                false,
+                [
+                    [
+                        "head",
+                        "bool",
+                        false,
+                        false,
+                        false,
+                        true
+                    ]
+                ],
+                "void"
+            ]
+        },
+        "properties": {
+            "body": [
+                "string",
+                true,
+                false,
+                true
+            ],
+            "headers": [
+                "array",
+                true,
+                false,
+                true
+            ],
+            "status": [
+                "int",
+                true,
+                false,
+                true
+            ]
+        },
+        "constants": []
+    },
+    "ZoltaGaska\\Routing\\Route": {
+        "methods": {
+            "__construct": [
+                true,
+                false,
+                [
+                    [
+                        "filePath",
+                        "string",
+                        false,
+                        false,
+                        null,
+                        false
+                    ],
+                    [
+                        "params",
+                        "array",
+                        false,
+                        false,
+                        [],
+                        true
+                    ]
+                ],
+                ""
+            ]
+        },
+        "properties": {
+            "filePath": [
+                "string",
+                true,
+                false,
+                true
+            ],
+            "params": [
+                "array",
+                true,
+                false,
+                true
+            ]
+        },
+        "constants": []
+    },
+    "ZoltaGaska\\Routing\\Router": {
+        "methods": {
+            "__construct": [
+                true,
+                false,
+                [
+                    [
+                        "pagesPath",
+                        "string",
+                        false,
+                        false,
+                        null,
+                        false
+                    ]
+                ],
+                ""
+            ],
+            "dispatch": [
+                true,
+                false,
+                [
+                    [
+                        "request",
+                        "ZoltaGaska\\Http\\Request",
+                        false,
+                        false,
+                        null,
+                        false
+                    ]
+                ],
+                "?ZoltaGaska\\Routing\\Route"
+            ]
+        },
+        "properties": [],
+        "constants": []
+    },
+    "ZoltaGaska\\Runtime": {
+        "methods": {
+            "application": [
+                true,
+                true,
+                [
+                    [
+                        "root",
+                        "string",
+                        false,
+                        false,
+                        null,
+                        false
+                    ]
+                ],
+                "ZoltaGaska\\Http\\Application"
+            ],
+            "boot": [
+                true,
+                true,
+                [
+                    [
+                        "root",
+                        "string",
+                        false,
+                        false,
+                        null,
+                        false
+                    ]
+                ],
+                "void"
+            ]
+        },
+        "properties": [],
+        "constants": []
+    },
+    "ZoltaGaska\\Security\\Session": {
+        "methods": {
+            "csrfToken": [
+                true,
+                true,
+                [],
+                "string"
+            ]
+        },
+        "properties": [],
+        "constants": []
+    }
+}

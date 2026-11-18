@@ -9,8 +9,11 @@
     },
     "require": {
         "php": ">=8.1",
-        "ext-pdo": "*",
-        "ext-json": "*"
+        "yellow-goose/core": "^0.2",
+        "yellow-goose/database": "^0.2",
+        "yellow-goose/react-bridge": "^0.2",
+        "yellow-goose/ssr-v8js": "^0.2",
+        "yellow-goose/security": "^0.2"
     },
     "suggest": {
         "ext-v8js": "React SSR inside PHP without Node.js on the server",

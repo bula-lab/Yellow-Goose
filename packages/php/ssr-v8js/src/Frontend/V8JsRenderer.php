@@ -10,6 +10,7 @@ final class V8JsRenderer implements Renderer
         private int $timeoutMs = 5000,
         private int $memoryLimit = 67108864,
         private int $maxOutput = 2097152,
+        private bool $allowLegacyBundle = true,
     ) {
         if ($timeoutMs < 1 || $memoryLimit < 1 || $maxOutput < 1) {
             throw new \InvalidArgumentException('Invalid SSR limits.');
@@ -32,6 +33,10 @@ final class V8JsRenderer implements Renderer
         $engine->payload = $input;
         $script = 'var console = {log: function(){}, warn: function(){}, error: function(){}};'
             . $source . "\n;(function() {"
+            . 'if ((GaskaSSR.protocolVersion !== undefined && GaskaSSR.protocolVersion !== 1)'
+            . ' || (GaskaSSR.bundleAbiVersion !== undefined && GaskaSSR.bundleAbiVersion !== 1))'
+            . ' throw new Error("Incompatible Yellow-Goose SSR ABI");'
+            . ($this->allowLegacyBundle ? '' : 'if (GaskaSSR.protocolVersion !== 1 || GaskaSSR.bundleAbiVersion !== 1) throw new Error("Missing Yellow-Goose SSR ABI");')
             . 'var input = JSON.parse(Gaska.payload);'
             . 'var html = GaskaSSR.render(input.page, input.props);'
             . 'if (typeof html !== "string") throw new Error("SSR render must return HTML");'

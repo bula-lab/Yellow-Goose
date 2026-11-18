@@ -67,7 +67,7 @@ def main():
         env = dict(os.environ, DB_CONNECTION="sqlite", DB_DATABASE=str(Path(tmp) / "test.sqlite"),
                    GASKA_SESSION_PATH=str(sessions), GASKA_VITE_DEV_SERVER="", GASKA_SSR="1",
                    COMPOSER_DISABLE_NETWORK="1")
-        run("composer", "install", "--no-interaction", "--no-scripts", cwd=project, env=env)
+        run("composer", "install", "--no-dev", "--no-interaction", "--no-scripts", cwd=project, env=env)
         run("php", "gaska", "db:migrate", cwd=project, env=env)
         run("php", "gaska", "db:migrate", cwd=project, env=env)
         run("php", "gaska", "db:seed", cwd=project, env=env)

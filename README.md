@@ -6,7 +6,8 @@
 </picture>
 
 Framework PHP + React: routing plikowy, loadery PHP, JSON API, ORM i SSR.
-Rdzeń jest pakietem Composer w `packages/framework/`.
+Biblioteki Composer są w `packages/php/`, a pakiety frontendowe w `packages/js/`.
+`packages/framework/` zachowuje zgodność dotychczasowego Runtime, CLI i importów.
 MVP zamknięte 2026-11-13: [zakres i akceptacja](docs/mvp.md).
 Demonstracja: notatnik z listą, szczegółami, dodawaniem, edycją, usuwaniem i paginacją.
 
@@ -67,8 +68,10 @@ API i nawigacja JSON nie zależą od dostępności renderera SSR.
 
 | Katalog | Zawartość |
 | --- | --- |
-| `packages/framework/src/` | Routing, HTTP, ORM, konfiguracja, CLI, integracja SSR |
-| `packages/framework/resources/` | Runtime React, Vite, supervisor i runner SSR |
+| `packages/php/` | Core, baza, React bridge, V8Js SSR, security, resources i adapter walidacji |
+| `packages/js/` | Pakiety npm React i Vite; źródło zasobów frontendowych |
+| `packages/framework/src/` | Runtime i CLI zgodności |
+| `packages/framework/resources/` | Generowane, samowystarczalne zasoby dla starych importów vendor |
 | `app/pages/` | Strony React; API w podkatalogu api |
 | `app/loaders/` | Dane stron z PHP |
 | `app/components/` | Komponenty aplikacji |
@@ -76,13 +79,20 @@ API i nawigacja JSON nie zależą od dostępności renderera SSR.
 | `public/build/` | Publiczne zasoby klienta |
 | `build/ssr/` | Prywatny bundle serwerowy, poza document root |
 
-Aplikacja instaluje yellow-goose/framework przez repozytorium Composer typu path.
+Aplikacja instaluje yellow-goose/framework i jego biblioteki przez repozytoria Composer typu path.
 Kod App nie jest częścią pakietu. Test niezależnego konsumenta instaluje fizyczną kopię
 pakietu i buduje własną stronę, loader i API. Pakiet nie jest opublikowany w Packagist.
 
 Dokumentacja: [pakiet](docs/framework-package.md), [SSR](docs/ssr.md),
 [routing](docs/routing.md), [loadery](docs/data-fetching.md), [API](docs/api-routes.md),
-[ORM](docs/orm.md), [konfiguracja](docs/configuration.md), [CLI](docs/cli.md).
+[ORM](docs/orm.md), [konfiguracja](docs/configuration.md), [CLI](docs/cli.md),
+[moduły i zasoby](docs/modules.md).
+
+A0–A2: podział pakietów, moduły, polityki, logowanie sesyjne i walidowane akcje
+są wdrożone. [Zakres i wyniki testów](docs/reports/a0-a2-implementation-2026-11-18.md).
+Demonstracja notatnika zachowuje dotychczasowy kontrakt; opcjonalny przykład kont
+i zasobów znajduje się w examples/modular-api. Formularze, tabele UI, CMS i 3D
+pozostają w kolejnych etapach.
 
 Logo, warianty i pliki źródłowe: [identyfikacja frameworka](docs/branding.md).
 
@@ -115,7 +125,9 @@ npm run verify
 
 Obejmuje testy PHP, oba buildy, supervisor, SSR, rzeczywisty entry point przez CGI
 oraz instalację pakietu w niezależnej aplikacji. Testy używają tymczasowych baz.
-Test pakietu współdzieli lokalne node_modules; nie zastępuje czystego npm ci.
+Test pakietów instaluje lokalne archiwa w niezależnych katalogach i nie współdzieli
+node_modules. Obejmuje stare importy vendor i nowe eksporty npm oraz profile core,
+resources i CSR bez PDO/V8Js. GASKA_PACKAGE_BROWSER=1 dodaje hydrację w Chromium.
 
 Pełne E2E — jednorazowo przygotuj Playwright:
 

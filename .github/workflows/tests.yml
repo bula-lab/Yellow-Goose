@@ -19,6 +19,7 @@ jobs:
       - run: composer install --no-interaction --prefer-dist
       - run: composer validate --no-check-publish
       - run: composer test
+      - run: python3 scripts/check-packages.py
   mysql:
     runs-on: ubuntu-latest
     services:
@@ -44,6 +45,11 @@ jobs:
           GASKA_TEST_MYSQL: '1'
           MYSQL_TEST_DATABASE: yellow_goose_test
           MYSQL_TEST_PASSWORD: test-password
+      - run: python3 tests/migrations.py
+        env:
+          GASKA_TEST_MYSQL: '1'
+          MYSQL_TEST_DATABASE: yellow_goose_test
+          MYSQL_TEST_PASSWORD: test-password
   browser:
     runs-on: ubuntu-latest
     steps:
@@ -55,7 +61,7 @@ jobs:
           docker run --rm --shm-size=1g -v "$PWD:/app" yellow-goose-test sh -ec '
             composer install --no-interaction --prefer-dist
             npm ci
-            npm run verify:all
+            GASKA_PACKAGE_BROWSER=1 npm run verify:all
           '
       - name: Verify SSR and CGI without Node or child-process execution
         run: |
@@ -64,6 +70,7 @@ jobs:
             ! command -v node
             php -d disable_functions=proc_open,popen,exec,shell_exec,system,passthru tests/ssr.php
             python3 tests/cgi.py
+            python3 tests/modules-cgi.py
           '
       - uses: actions/upload-artifact@v4
         if: always()

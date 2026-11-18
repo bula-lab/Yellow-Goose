@@ -32,6 +32,12 @@ try {
     file_put_contents($bundle, 'var GaskaSSR = { render: function(page, props) { return page + ":" + (props.text || "empty"); }};');
     $renderer = new V8JsRenderer($bundle);
     verify($renderer->render('index.jsx', []) === 'index.jsx:empty', 'empty props object');
+    rejects(fn () => (new V8JsRenderer($bundle, allowLegacyBundle: false))->render('index.jsx', []), 'Missing Yellow-Goose SSR ABI');
+    file_put_contents($bundle, 'var GaskaSSR = { protocolVersion: 1, bundleAbiVersion: 99, render: function() { throw new Error("render was called"); }};');
+    rejects(fn () => $renderer->render('index.jsx', []), 'Incompatible Yellow-Goose SSR ABI');
+    file_put_contents($bundle, 'var GaskaSSR = { protocolVersion: 1, bundleAbiVersion: 1, render: function() { return "strict"; }};');
+    verify((new V8JsRenderer($bundle, allowLegacyBundle: false))->render('page', []) === 'strict', 'strict ABI accepted');
+    file_put_contents($bundle, 'var GaskaSSR = { render: function(page, props) { return page + ":" + (props.text || "empty"); }};');
     $large = str_repeat('ą', 50000);
     verify($renderer->render('page.jsx', ['text' => $large]) === 'page.jsx:' . $large, 'large Unicode props');
     $unsafe = "'\"\\</script>\n; throw new Error('injected');";
@@ -94,7 +100,7 @@ try {
     verify($app->handle(new Request('/api/hello', 'GET'))->status === 200, 'API works without SSR');
     verify($app->handle(new Request('/', 'GET', ['X-YG-Navigation' => '1']))->status === 200, 'navigation works without SSR bundle');
 
-    $real = new V8JsRenderer(dirname(__DIR__) . '/build/ssr/server.js');
+    $real = new V8JsRenderer(dirname(__DIR__) . '/build/ssr/server.js', allowLegacyBundle: false);
     $html = $real->render('posts/[id].jsx', ['post' => ['id' => 42, 'title' => '<unsafe>', 'content' => 'Treść', 'created_at' => '2026-11-13'], 'csrfToken' => 'test']);
     verify(str_contains($html, '<h1>&lt;unsafe&gt;</h1>') && str_contains($html, 'Treść'), 'actual self-contained React bundle');
     echo "PASS: {$count} native V8Js SSR assertions (no Node required)\n";

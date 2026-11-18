@@ -13,14 +13,22 @@ final class Cli
         try {
             chdir($root);
             Runtime::boot($root);
+            $modules = Runtime::modules($root);
+            foreach ($modules?->commands() ?? [] as $name) {
+                if (in_array($name, ['help', '--help', '-h', 'dev', 'serve', 'db:migrate', 'db:seed'], true)) {
+                    throw new \LogicException('Module command conflicts with legacy CLI: ' . $name);
+                }
+            }
             if (in_array($command, ['help', '--help', '-h'], true)) {
                 echo "Żółta-Gąska CLI\n"
                     . "php gaska dev [--port=8000] [--vite-port=5173]  PHP + Vite, Ctrl+C zatrzymuje oba\n"
                     . "php gaska serve [--host=127.0.0.1] [--port=8000] [--dev]  Tylko serwer PHP\n"
                     . "php gaska db:migrate    Aktualizuj schemat bazy\n"
                     . "php gaska db:seed       Dane demonstracyjne do pustej bazy\n";
+                foreach ($modules?->commands() ?? [] as $name) echo 'php gaska ' . $name . "\n";
                 return 0;
             }
+            if (in_array($command, $modules?->commands() ?? [], true)) return $modules->run($command, $args);
             if (in_array($command, ['db:migrate', 'db:seed'], true)) {
                 $config = require $root . '/config/database.php';
                 if ($config['default'] === 'sqlite') {
@@ -33,7 +41,7 @@ final class Cli
                 }
                 $pdo = Connection::getInstance();
                 if ($command === 'db:migrate') {
-                    $ran = (new Migrator($pdo, $root . '/database/migrations'))->migrate();
+                    $ran = (new Migrator($pdo, $root . '/database/migrations', $modules?->migrationDirectories() ?? []))->migrate();
                     echo $ran ? 'Wykonano: ' . implode(', ', $ran) . "\n" : "Baza jest aktualna.\n";
                 } else {
                     $seed = require $root . '/database/seed.php';

@@ -1,0 +1,18 @@
+{
+    "name": "yellow-goose/ssr-v8js",
+    "version": "0.2.0",
+    "description": "Yellow-Goose ssr-v8js",
+    "type": "library",
+    "require": {
+        "php": ">=8.1",
+        "yellow-goose/react-bridge": "^0.2"
+    },
+    "autoload": {
+        "psr-4": {
+            "ZoltaGaska\\": "src/"
+        }
+    },
+    "suggest": {
+        "ext-v8js": "Required when rendering SSR; installation and CSR remain available without it"
+    }
+}

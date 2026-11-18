@@ -1,0 +1,18 @@
+{
+    "name": "yellow-goose/security",
+    "version": "0.2.0",
+    "description": "Yellow-Goose security",
+    "type": "library",
+    "require": {
+        "php": ">=8.1",
+        "yellow-goose/core": "^0.2"
+    },
+    "autoload": {
+        "psr-4": {
+            "ZoltaGaska\\": "src/"
+        }
+    },
+    "suggest": {
+        "ext-session": "Required only by the Session and SessionAuthenticator providers"
+    }
+}

@@ -1,0 +1,15 @@
+{
+    "name": "yellow-goose/react-bridge",
+    "version": "0.2.0",
+    "description": "Yellow-Goose react-bridge",
+    "type": "library",
+    "require": {
+        "php": ">=8.1",
+        "yellow-goose/core": "^0.2"
+    },
+    "autoload": {
+        "psr-4": {
+            "ZoltaGaska\\": "src/"
+        }
+    }
+}

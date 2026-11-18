@@ -1,0 +1,16 @@
+{
+    "name": "yellow-goose/validator-symfony",
+    "version": "0.2.0",
+    "description": "Symfony Validator adapter for Yellow-Goose resources",
+    "type": "library",
+    "require": {
+        "php": ">=8.1",
+        "yellow-goose/resources": "^0.2",
+        "symfony/validator": "^6.4"
+    },
+    "autoload": {
+        "psr-4": {
+            "ZoltaGaska\\Resources\\": "src/Resources/"
+        }
+    }
+}
