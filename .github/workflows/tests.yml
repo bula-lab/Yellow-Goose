@@ -55,6 +55,11 @@ jobs:
           YG_INTEGRATION_MYSQL: '1'
           MYSQL_TEST_DATABASE: yellow_goose_test
           MYSQL_TEST_PASSWORD: test-password
+      - run: php tests/c1.php --mysql
+        env:
+          YG_INTEGRATION_MYSQL: '1'
+          MYSQL_TEST_DATABASE: yellow_goose_test
+          MYSQL_TEST_PASSWORD: test-password
   browser:
     runs-on: ubuntu-latest
     steps:
@@ -76,6 +81,7 @@ jobs:
             php -d disable_functions=proc_open,popen,exec,shell_exec,system,passthru tests/ssr.php
             python3 tests/cgi.py
             python3 tests/modules-cgi.py
+            python3 tests/c1-http.py
           '
       - uses: actions/upload-artifact@v4
         if: always()
