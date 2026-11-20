@@ -3,6 +3,6 @@
   "version": "0.2.0",
   "type": "module",
   "files": ["src", "README.md"],
-  "exports": {".": "./src/Viewport.jsx"},
+  "exports": {".": "./src/Viewport.jsx", "./multi": "./src/SceneViewport.jsx"},
   "peerDependencies": {"react": "19.3.1"}
 }

@@ -1,0 +1,9 @@
+{
+  "name": "@yellow-goose/editor",
+  "version": "0.2.0",
+  "type": "module",
+  "files": ["src", "README.md"],
+  "exports": {".": "./src/SceneEditor.jsx", "./store": "./src/store.js"},
+  "dependencies": {"@yellow-goose/scene": "^0.2.0", "@yellow-goose/react": "^0.2.0", "@yellow-goose/ui": "^0.2.0"},
+  "peerDependencies": {"react": "19.3.1"}
+}
