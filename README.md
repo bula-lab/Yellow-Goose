@@ -96,7 +96,10 @@ viewer Babylon oraz CMS z opublikowanymi rewizjami. Przykład examples/garage-cm
 [Uruchomienie przykładu](examples/garage-cms/README.md) ·
 [Raport integracji B1/B2](docs/reports/b1-b2-integration-2026-11-20.md).
 Notatnik zachowuje dotychczasowy kontrakt; prosty przykład kont i zasobów pozostaje
-w examples/modular-api. Edytor scen, import CAD i gry są kolejnymi etapami.
+w examples/modular-api. C1 dodaje niezależne scene-api i npm editor: trwałe projekty,
+instancje modeli, transformacje, autosave, Undo/Redo i kontrolę konfliktów dwóch kart.
+[Przykład edytora](examples/scene-editor/README.md) · [Wyniki C1](docs/reports/c1-implementation-2026-11-20.md).
+Import CAD i gry są kolejnymi etapami.
 
 Logo, warianty i pliki źródłowe: [identyfikacja frameworka](docs/branding.md).
 
