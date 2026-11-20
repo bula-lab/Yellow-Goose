@@ -1,0 +1,18 @@
+{
+    "name": "yellow-goose/scene-api",
+    "version": "0.2.0",
+    "type": "library",
+    "description": "Project-scoped scene documents, revisioned commands and transactional events",
+    "require": {
+        "php": ">=8.1",
+        "ext-pdo": "*",
+        "yellow-goose/core": "^0.2",
+        "yellow-goose/security": "^0.2",
+        "yellow-goose/database": "^0.2"
+    },
+    "autoload": {
+        "psr-4": {
+            "ZoltaGaska\\Scene\\": "src/Scene/"
+        }
+    }
+}

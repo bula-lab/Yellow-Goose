@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "dd33d55ffaf10680a8eea34575c23389",
+    "content-hash": "dcc0546eda03bf3a6aacbc146660b929",
     "packages": [
         {
             "name": "yellow-goose/core",
@@ -773,6 +773,33 @@
                 }
             },
             "description": "Yellow-Goose resources",
+            "transport-options": {
+                "symlink": true,
+                "relative": true
+            }
+        },
+        {
+            "name": "yellow-goose/scene-api",
+            "version": "0.2.0",
+            "dist": {
+                "type": "path",
+                "url": "packages/php/scene-api",
+                "reference": "a0ba880316a17e386f4b2785b99f0a7b3c20850a"
+            },
+            "require": {
+                "ext-pdo": "*",
+                "php": ">=8.1",
+                "yellow-goose/core": "^0.2",
+                "yellow-goose/database": "^0.2",
+                "yellow-goose/security": "^0.2"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "ZoltaGaska\\Scene\\": "src/Scene/"
+                }
+            },
+            "description": "Project-scoped scene documents, revisioned commands and transactional events",
             "transport-options": {
                 "symlink": true,
                 "relative": true

@@ -11,6 +11,7 @@ ALLOWED = {
     'resources': {'core', 'security'}, 'validator-symfony': {'resources'},
     'jobs': {'core'}, 'assets': {'core', 'security', 'jobs'},
     'cms': {'core', 'security', 'resources', 'database'},
+    'scene-api': {'core', 'security', 'database'},
 }
 packages = [ROOT / 'packages/framework', *sorted((ROOT / 'packages/php').iterdir())]
 graph, classes, owners = {}, {}, {}
@@ -67,6 +68,6 @@ for directory in (ROOT / 'packages/js').iterdir():
     peers = ['react', 'react-dom'] if directory.name in {'react', 'vite'} else ['react']
     for peer in peers:
         assert manifest['peerDependencies'][peer] == '19.3.1'
-    if directory.name in {'react', 'vite', 'ui', 'scene'}:
+    if directory.name in {'react', 'vite', 'ui', 'scene', 'editor'}:
         assert not any('babylon' in name or name == 'three' for name in manifest.get('dependencies', {})), manifest['name']
 print(f'PASS: {len(graph)} PHP packages, acyclic graph, {len(classes)} unique class owners and npm exports')
