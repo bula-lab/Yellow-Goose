@@ -18,7 +18,8 @@ export function frameworkConfig(root) {
         publicDir: false,
         resolve: {
             dedupe: ['react', 'react-dom'],
-            ...(isSsrBuild ? { alias: [{ find: /^react-dom\/server$/, replacement: syncRenderer }] } : {}),
+            ...(isSsrBuild ? { alias: [{ find: /^react-dom\/server$/, replacement: syncRenderer },
+                { find: /^@yellow-goose\/babylon\/engine$/, replacement: '@yellow-goose/babylon/ssr' }] } : {}),
         },
         define: { 'process.env.NODE_ENV': JSON.stringify(isSsrBuild ? 'production' : process.env.NODE_ENV || 'development') },
         ssr: { target: 'webworker', noExternal: true },

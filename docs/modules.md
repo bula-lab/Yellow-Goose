@@ -94,7 +94,11 @@ Resources nie zależy od Symfony; inny adapter implementuje Validator.
 Schemat UI jest osobną, ograniczoną deklaracją typów string/integer/number/boolean,
 etykiet, wymaganych pól, długości, zakresów i choices. Nie serializuje callbacków
 ani dowolnych constraints PHP do JavaScript. Nie zastępuje walidacji serwera.
-Komponenty Form/DataTable/Dialog oraz panel CMS należą do kolejnych etapów B1/B2.
+Metadane unit={label,factor} dotyczą wyłącznie pól liczbowych; factor musi być dodatni
+i skończony. group jest nazwą grupy pól. Choices pozostają wartościami kanonicznymi:
+heightMm=2130 i factor=10 dają opcję 213 cm, a nie 2130 cm.
+Komponenty Form/DataTable/Dialog i opcjonalny CMS są wdrożone w B1/B2;
+pełny przykład znajduje się w examples/garage-cms.
 
 Adapter opiera się na oficjalnym [Symfony Validator 6.4](https://symfony.com/doc/6.4/components/validator.html)
 i [Collection](https://symfony.com/doc/6.4/reference/constraints/Collection.html).

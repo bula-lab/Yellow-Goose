@@ -14,7 +14,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends git php8.4-dev 
 
 FROM debian:trixie-slim AS runtime
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    ca-certificates python3 php8.4-cli php8.4-cgi php8.4-mbstring php8.4-sqlite3 php8.4-mysql libbrotli1 libcares2 libicu76 libnghttp2-14 libssl3t64 libuv1t64 libstdc++6 libzstd1 zlib1g \
+    ca-certificates python3 php8.4-cli php8.4-cgi php8.4-mbstring php8.4-sqlite3 php8.4-mysql php8.4-gd libbrotli1 libcares2 libicu76 libnghttp2-14 libssl3t64 libuv1t64 libstdc++6 libzstd1 zlib1g \
     && rm -rf /var/lib/apt/lists/*
 COPY --from=base /usr/lib/*-linux-gnu/libnode.so.115 /usr/local/lib/
 RUN ldconfig

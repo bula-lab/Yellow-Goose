@@ -2,6 +2,7 @@
 namespace ZoltaGaska\Http;
 
 use ZoltaGaska\Frontend\Assets;
+use ZoltaGaska\Frontend\PageData;
 use ZoltaGaska\Frontend\Renderer;
 use ZoltaGaska\Routing\Router;
 
@@ -16,6 +17,7 @@ class Application
         private ?Renderer $renderer = null,
         private array $document = [],
         private ?Kernel $moduleKernel = null,
+        private ?object $loaderContext = null,
     ) {
         $this->pagesPath = rtrim($pagesPath, '/\\');
         $this->loadersPath = $loadersPath ?? dirname($this->pagesPath) . '/loaders';
@@ -91,12 +93,18 @@ class Application
             $page = str_replace('\\', '/', substr($route->filePath, strlen($this->pagesPath) + 1));
             $loaderFile = $this->loadersPath . '/' . preg_replace('/\.(jsx|js|tsx|ts)$/', '.php', $page);
             $props = [];
+            $head = ['title' => $this->document['title'] ?? 'Żółta-Gąska'];
             if (is_file($loaderFile)) {
                 $loader = require $loaderFile;
                 if (!is_callable($loader)) throw new \RuntimeException('Page loader must return a callable.');
-                $props = $loader($request, $route->params);
+                $props = $this->loaderContext === null ? $loader($request, $route->params)
+                    : $loader($request, $route->params, $this->loaderContext);
                 if ($props instanceof Response) return $props;
-                if (!is_array($props)) throw new \RuntimeException('Page loader must return props or a response.');
+                if ($props instanceof PageData) {
+                    $head = $props->head($head['title']);
+                    $props = $props->props;
+                }
+                if (!is_array($props)) throw new \RuntimeException('Page loader must return props, PageData or a response.');
             }
             // Framework props cannot be overwritten by a loader.
             $props = ['params' => $route->params, 'csrfToken' => $this->csrfToken] + $props;
@@ -105,7 +113,7 @@ class Application
                 'props' => $props,
                 'url' => $request->url,
                 'version' => $version,
-                'head' => ['title' => $this->document['title'] ?? 'Żółta-Gąska'],
+                'head' => $head,
             ];
             if ($navigation) return $this->navigation($payload);
             $data = json_encode($payload, JSON_THROW_ON_ERROR | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT);
@@ -113,7 +121,10 @@ class Application
             $html = $this->renderer?->render($page, $props) ?? '<p>Ładowanie strony…</p>';
             $mode = $this->renderer === null ? 'csr' : 'ssr';
             $escape = static fn (string $value): string => htmlspecialchars($value, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
-            $title = $escape($this->document['title'] ?? 'Żółta-Gąska');
+            $title = $escape($head['title']);
+            $metadata = '';
+            if (isset($head['description'])) $metadata .= '<meta name="description" content="' . $escape($head['description']) . '">';
+            if (isset($head['canonical'])) $metadata .= '<link rel="canonical" href="' . $escape($head['canonical']) . '">';
             $icons = '';
             foreach (['favicon' => 'icon', 'appleTouchIcon' => 'apple-touch-icon'] as $key => $rel) {
                 if (!empty($this->document[$key])) {
@@ -127,6 +138,7 @@ class Application
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{$title}</title>
+    {$metadata}
     {$icons}
     {$tags}
 </head>

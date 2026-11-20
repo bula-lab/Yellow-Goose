@@ -1,0 +1,9 @@
+{
+  "name": "@yellow-goose/babylon",
+  "version": "0.2.0",
+  "type": "module",
+  "files": ["src", "README.md"],
+  "exports": {".": "./src/BabylonViewport.jsx", "./engine": "./src/engine.js", "./ssr": "./src/ssr.js"},
+  "dependencies": {"@yellow-goose/scene": "^0.2.0", "@babylonjs/core": "8.26.0", "@babylonjs/loaders": "8.26.0"},
+  "peerDependencies": {"react": "19.3.1"}
+}

@@ -26,11 +26,11 @@ export async function startClient(pages) {
                 await new Promise(resolve => {
                     signal.addEventListener('abort', resolve, { once: true });
                     const committed = () => { signal.removeEventListener('abort', resolve); resolve(); };
-                    root.render(<PageShell key={++visit} Page={NextPage} props={data.props || {}} onReady={committed} />);
+                    root.render(<PageShell visit={++visit} Page={NextPage} props={data.props || {}} onReady={committed} />);
                 });
             });
         };
-        const tree = <PageShell key={visit} Page={Page} props={initial.props} onReady={ready} />;
+        const tree = <PageShell visit={visit} Page={Page} props={initial.props} onReady={ready} />;
         if (container.dataset.renderMode === 'ssr') {
             root = hydrateRoot(container, tree, {
                 identifierPrefix: 'gaska-',

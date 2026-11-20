@@ -1,0 +1,17 @@
+{
+    "name": "yellow-goose/garage-example",
+    "type": "project",
+    "description": "Server-rendered sample garage catalog and configurator",
+    "require": {
+        "php": ">=8.1",
+        "ext-pdo_sqlite": "*",
+        "ext-session": "*",
+        "yellow-goose/cms": "^0.2",
+        "yellow-goose/assets": "^0.2",
+        "yellow-goose/jobs": "^0.2",
+        "yellow-goose/react-bridge": "^0.2",
+        "yellow-goose/ssr-v8js": "^0.2"
+    },
+    "autoload": {"psr-4": {"Garage\\": "src/Garage/"}},
+    "repositories": [{"type": "path", "url": "../../packages/php/*"}]
+}

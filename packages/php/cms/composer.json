@@ -1,0 +1,19 @@
+{
+    "name": "yellow-goose/cms",
+    "version": "0.2.0",
+    "type": "library",
+    "description": "Project-scoped product catalogs with immutable content revisions and explicit publication",
+    "require": {
+        "php": ">=8.1",
+        "ext-pdo": "*",
+        "yellow-goose/core": "^0.2",
+        "yellow-goose/security": "^0.2",
+        "yellow-goose/resources": "^0.2",
+        "yellow-goose/database": "^0.2"
+    },
+    "autoload": {
+        "psr-4": {
+            "ZoltaGaska\\Cms\\": "src/Cms/"
+        }
+    }
+}

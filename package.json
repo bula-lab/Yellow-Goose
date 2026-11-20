@@ -15,11 +15,16 @@
     "build:ssr": "vite build --ssr app/server.jsx",
     "test:runtime": "node --test tests/*.test.mjs && php tests/ssr.php",
     "test:package": "python3 tests/package.py",
-    "verify": "npm run check:packages && npm test && npm run test:modules && npm run build && npm run test:runtime && npm run test:http && npm run test:package",
-    "verify:all": "npm run verify && npm run test:e2e",
+    "verify": "npm run check:packages && npm test && npm run test:modules && npm run test:binary && npm run build && npm run build:garage && npm run test:runtime && npm run test:http && npm run test:package && npm run test:garage:http && npm run test:product:packages",
+    "verify:all": "npm run verify && npm run test:e2e && npm run test:product:browser",
     "sync:legacy": "node scripts/sync-legacy.mjs",
     "check:packages": "python3 scripts/check-packages.py && node scripts/sync-legacy.mjs --check",
-    "test:modules": "python3 tests/modules-cgi.py && python3 tests/migrations.py"
+    "test:modules": "python3 tests/modules-cgi.py && python3 tests/migrations.py",
+    "build:garage": "npm run build --prefix examples/garage-cms",
+    "test:binary": "python3 tests/integration-request.py",
+    "test:garage:http": "python3 tests/b2-http.py",
+    "test:product:packages": "python3 tests/integration-packages.py --minimal-runtime",
+    "test:product:browser": "python3 tests/b1-browser.py && python3 tests/b2-browser.py"
   },
   "dependencies": {
     "react": "19.3.1",
@@ -27,6 +32,11 @@
   },
   "devDependencies": {
     "@vitejs/plugin-react": "6.3.0",
-    "vite": "8.3.8"
+    "vite": "8.3.8",
+    "@yellow-goose/react": "file:packages/js/react",
+    "@yellow-goose/vite": "file:packages/js/vite",
+    "@yellow-goose/ui": "file:packages/js/ui",
+    "@yellow-goose/scene": "file:packages/js/scene",
+    "@yellow-goose/babylon": "file:packages/js/babylon"
   }
 }

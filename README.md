@@ -88,11 +88,15 @@ Dokumentacja: [pakiet](docs/framework-package.md), [SSR](docs/ssr.md),
 [ORM](docs/orm.md), [konfiguracja](docs/configuration.md), [CLI](docs/cli.md),
 [moduły i zasoby](docs/modules.md).
 
-A0–A2: podział pakietów, moduły, polityki, logowanie sesyjne i walidowane akcje
-są wdrożone. [Zakres i wyniki testów](docs/reports/a0-a2-implementation-2026-11-18.md).
-Demonstracja notatnika zachowuje dotychczasowy kontrakt; opcjonalny przykład kont
-i zasobów znajduje się w examples/modular-api. Formularze, tabele UI, CMS i 3D
-pozostają w kolejnych etapach.
+A0–A2 dostarczają podział pakietów, moduły, polityki, logowanie i walidowane akcje.
+[Zakres i wyniki A0–A2](docs/reports/a0-a2-implementation-2026-11-18.md).
+B1/B2 dodają formularze, tabele, modale, trwały workspace, upload modeli, worker PHP,
+viewer Babylon oraz CMS z opublikowanymi rewizjami. Przykład examples/garage-cms
+łączy te funkcje w katalog i konfigurator garażu z jawnymi cenami demonstracyjnymi.
+[Uruchomienie przykładu](examples/garage-cms/README.md) ·
+[Raport integracji B1/B2](docs/reports/b1-b2-integration-2026-11-20.md).
+Notatnik zachowuje dotychczasowy kontrakt; prosty przykład kont i zasobów pozostaje
+w examples/modular-api. Edytor scen, import CAD i gry są kolejnymi etapami.
 
 Logo, warianty i pliki źródłowe: [identyfikacja frameworka](docs/branding.md).
 
@@ -123,8 +127,10 @@ Kontrole bez portów sieciowych (PHP z V8Js, Python 3, php-cgi i Node do builda)
 npm run verify
 ```
 
-Obejmuje testy PHP, oba buildy, supervisor, SSR, rzeczywisty entry point przez CGI
-oraz instalację pakietu w niezależnej aplikacji. Testy używają tymczasowych baz.
+Obejmuje testy PHP, buildy notatnika i konfiguratora, supervisor, SSR, rzeczywisty
+entry point przez CGI oraz instalację archiwów w niezależnych aplikacjach.
+Testy używają tymczasowych baz i magazynów plików. Profil Assets wymaga dodatkowo GD;
+core, CSR i CMS tekstowy nie wymagają tej biblioteki.
 Test pakietów instaluje lokalne archiwa w niezależnych katalogach i nie współdzieli
 node_modules. Obejmuje stare importy vendor i nowe eksporty npm oraz profile core,
 resources i CSR bez PDO/V8Js. GASKA_PACKAGE_BROWSER=1 dodaje hydrację w Chromium.
@@ -171,7 +177,8 @@ sandboxa zostały rozstrzygnięte przez wykonanie testów na GitHub Actions.
 
 ## Granice
 
-Lokalna demonstracja, bez kont i autoryzacji prywatnych danych.
+Notatnik jest lokalną demonstracją bez kont. Opcjonalny przykład CMS ma logowanie
+redaktora i kontrolę publikacji; reguły oraz ceny konfiguratora są fikcyjne.
 Brak SSG/ISR, RSC, RPC „Zero API” i rozbudowanych relacji ORM.
 Wbudowany serwer PHP służy do developmentu. Przy innym serwerze document root musi
 wskazywać `public/`; żądania aplikacji kieruj do index.php i blokuj pliki ukryte,

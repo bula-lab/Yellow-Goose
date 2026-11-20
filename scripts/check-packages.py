@@ -9,6 +9,8 @@ ALLOWED = {
     'core': set(), 'database': set(), 'react-bridge': {'core'},
     'ssr-v8js': {'react-bridge'}, 'security': {'core'},
     'resources': {'core', 'security'}, 'validator-symfony': {'resources'},
+    'jobs': {'core'}, 'assets': {'core', 'security', 'jobs'},
+    'cms': {'core', 'security', 'resources', 'database'},
 }
 packages = [ROOT / 'packages/framework', *sorted((ROOT / 'packages/php').iterdir())]
 graph, classes, owners = {}, {}, {}
@@ -29,7 +31,7 @@ for directory in packages:
         classes[fqcn] = file
         owners[fqcn] = short
         if short == 'core':
-            assert not re.search(r'\bPDO\b|ZoltaGaska\\(?:Frontend|Security|Database|Resources)\\', source), file
+            assert not re.search(r'\bPDO\b|ZoltaGaska\\(?:Frontend|Security|Database|Resources|Assets|Jobs|Cms)\\', source), file
 
 visited, visiting = set(), set()
 def visit(name):
@@ -46,11 +48,25 @@ for name in graph:
 
 legacy = json.loads((ROOT / 'tests/contracts/legacy.json').read_text())
 assert all(symbol in classes for symbol in legacy), 'Missing legacy class owner'
+def export_targets(value):
+    if isinstance(value, str):
+        yield value
+    elif isinstance(value, dict):
+        for target in value.values():
+            yield from export_targets(target)
+    else:
+        raise AssertionError('Unsupported package export: ' + repr(value))
+
+
 for directory in (ROOT / 'packages/js').iterdir():
     manifest = json.loads((directory / 'package.json').read_text())
     assert manifest['version'] == '0.2.0'
-    for export in manifest['exports'].values():
+    for export in export_targets(manifest['exports']):
+        assert export.startswith('./') and '..' not in Path(export).parts, (directory, export)
         assert (directory / export).is_file(), (directory, export)
-    for peer in ['react', 'react-dom']:
+    peers = ['react', 'react-dom'] if directory.name in {'react', 'vite'} else ['react']
+    for peer in peers:
         assert manifest['peerDependencies'][peer] == '19.3.1'
+    if directory.name in {'react', 'vite', 'ui', 'scene'}:
+        assert not any('babylon' in name or name == 'three' for name in manifest.get('dependencies', {})), manifest['name']
 print(f'PASS: {len(graph)} PHP packages, acyclic graph, {len(classes)} unique class owners and npm exports')

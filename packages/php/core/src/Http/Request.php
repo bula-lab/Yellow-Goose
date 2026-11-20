@@ -30,14 +30,22 @@ class Request
         foreach (['CONTENT_TYPE', 'CONTENT_LENGTH'] as $name) {
             if (isset($_SERVER[$name])) $headers[str_replace('_', '-', $name)] = $_SERVER[$name];
         }
+        $body = file_get_contents('php://input', false, null, 0, self::MAX_BODY_BYTES + 1);
         return new self(
             $_SERVER['REQUEST_URI'] ?? '/', $_SERVER['REQUEST_METHOD'] ?? 'GET', $headers,
-            file_get_contents('php://input', false, null, 0, self::MAX_BODY_BYTES + 1) ?: '',
+            $body === false ? '' : $body,
         );
     }
 
     public function header(string $name, ?string $default = null): ?string { return $this->headers[strtolower($name)] ?? $default; }
     public function query(string $name, mixed $default = null): mixed { return $this->query[$name] ?? $default; }
+
+    public function bytes(int $limit = self::MAX_BODY_BYTES): string
+    {
+        if ($limit < 1 || $limit > self::MAX_BODY_BYTES) throw new \InvalidArgumentException('Invalid request byte limit.');
+        if (strlen($this->rawBody) > $limit) throw new HttpException(413, 'Request body exceeds the byte limit.');
+        return $this->rawBody;
+    }
 
     public function json(): array
     {

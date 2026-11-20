@@ -13,6 +13,9 @@ w Packagist ani npm; testy instalują ich lokalne archiwa.
 | yellow-goose/security | Tożsamość, polityki, CSRF i opcjonalne logowanie sesyjne |
 | yellow-goose/resources | Jawne zapytania i akcje, schemat UI, walidacja i serializacja |
 | yellow-goose/validator-symfony | Opcjonalny adapter Symfony Validator 6.4 |
+| yellow-goose/jobs | Trwała kolejka PDO, lease/retry i worker PHP CLI |
+| yellow-goose/assets | Fragmenty uploadu, prywatna kwarantanna, wersje GLB/postera i strumieniowanie plików |
+| yellow-goose/cms | Szkice, niezmienne rewizje, katalog i jawna publikacja |
 | yellow-goose/framework | Fasada zgodności: Runtime, CLI oraz lokalne zasoby frontendowe |
 
 Instalacja biblioteki nie włącza tras, panelu ani migracji. Reguły aplikacji i jej
@@ -88,7 +91,30 @@ nowe eksporty npm, CLI, build klienta i SSR, loader/API oraz useId.
 Nie współdzieli root node_modules. Osobne instalacje core, resources i CSR są
 uruchamiane przez PHP -n bez PDO/V8Js; resources nie wymaga Symfony Validator.
 
+`npm run test:product:packages` sprawdza dodatkowo fizyczne archiwa B1/B2:
+CMS bez Assets/React/GD, Assets+Jobs bez CMS/React i z wyłączonymi procesami PHP,
+UI bez Babylon oraz pełny przykład konfiguratora poza monorepo. Ostatni profil
+buduje klienta i SSR, a następnie wykonuje realny przepływ CGI upload→worker→publikacja.
+Polecenie wymaga środowiska PHP/V8Js/GD z ładowalnymi modułami, jak obraz testowy Docker.
+
 `GASKA_PACKAGE_BROWSER=1 npm run test:package` dodaje Chromium: hydrację, useId
 oraz interaktywny stan w obu konsumentach. Wymaga przygotowanego Playwright.
 Macierz klas i eksportów jest sprawdzana przez npm run check:packages,
 a stare sygnatury przez php tests/contracts.php.
+
+## Opcjonalne UI i 3D
+
+`@yellow-goose/ui` eksportuje Form, DataTable, Dialog i AssetPicker.
+`@yellow-goose/react/workspace` dostarcza WorkspaceShell oraz ochronę opuszczenia
+niezapisanego formularza. getLayout strony jest montowany ponad kluczem wizyty.
+Używaj spójnie eksportów npm albo odpowiadających im zasobów vendor dla runtime
+klienta i nawigacji; źródło zasobów legacy jest generowane z packages/js/react.
+
+`@yellow-goose/scene` posiada port viewera, a `@yellow-goose/babylon` jego opcjonalną
+implementację. Silnik jest importowany po mount i ma osobny chunk klienta. Konfiguracja
+Vite zastępuje entry silnika stubem SSR; CMS bez viewera nie pobiera tego chunka.
+Samo zainstalowanie PHP CMS nie instaluje silnika ani biblioteki GD.
+
+Pierwszy worker przyjmuje ograniczony, statyczny profil GLB v2 oraz dostarczony
+poster PNG/JPEG. Limity i wykluczone elementy formatu opisuje pakiet assets.
+Nie jest to uniwersalny importer glTF/CAD. Node pozostaje narzędziem dev/build.

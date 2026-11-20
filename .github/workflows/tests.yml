@@ -14,7 +14,7 @@ jobs:
       - uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php }}
-          extensions: pdo_sqlite, mbstring
+          extensions: pdo_sqlite, mbstring, gd
           coverage: none
       - run: composer install --no-interaction --prefer-dist
       - run: composer validate --no-check-publish
@@ -37,7 +37,7 @@ jobs:
       - uses: shivammathur/setup-php@v2
         with:
           php-version: '8.5'
-          extensions: pdo_mysql, pdo_sqlite, mbstring
+          extensions: pdo_mysql, pdo_sqlite, mbstring, gd
           coverage: none
       - run: composer install --no-interaction --prefer-dist
       - run: php tests/run.php
@@ -48,6 +48,11 @@ jobs:
       - run: python3 tests/migrations.py
         env:
           GASKA_TEST_MYSQL: '1'
+          MYSQL_TEST_DATABASE: yellow_goose_test
+          MYSQL_TEST_PASSWORD: test-password
+      - run: php tests/integration-mysql.php
+        env:
+          YG_INTEGRATION_MYSQL: '1'
           MYSQL_TEST_DATABASE: yellow_goose_test
           MYSQL_TEST_PASSWORD: test-password
   browser:

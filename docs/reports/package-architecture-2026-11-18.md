@@ -2,7 +2,7 @@
 
 Decyzja architektoniczna z 2026-11-18. Baza analizy: b1e8000.
 
-Aktualizacja wykonawcza: A0–A2 wdrożone i zweryfikowane lokalnie.
+Aktualizacja wykonawcza: A0–A2 są zapisane w 499ca68. B1/B2 wdrożone i zweryfikowane lokalnie 2026-11-20; [wynik integracji](b1-b2-integration-2026-11-20.md).
 [Wyniki i zakres](a0-a2-implementation-2026-11-18.md). Poniższy plan opisuje punkt wyjścia i decyzje podziału. To plan, nie istniejąca
 struktura dystrybucji. Obecnie wydawany lokalnie jest jeden pakiet Composer
 `yellow-goose/framework`; aplikacja jest prywatnym projektem npm.

@@ -1,0 +1,8 @@
+{
+    "name": "yellow-goose/assets",
+    "version": "0.2.0",
+    "description": "Private, versioned GLB uploads with a transactional PHP worker",
+    "type": "library",
+    "require": {"php": ">=8.1", "ext-pdo": "*", "ext-gd": "*", "yellow-goose/core": "^0.2", "yellow-goose/security": "^0.2", "yellow-goose/jobs": "^0.2"},
+    "autoload": {"psr-4": {"ZoltaGaska\\Assets\\": "src/Assets/"}}
+}

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "623197c92ca3eccb71ebb69042d21d1a",
+    "content-hash": "dd33d55ffaf10680a8eea34575c23389",
     "packages": [
         {
             "name": "yellow-goose/core",
@@ -671,6 +671,87 @@
                 }
             ],
             "time": "2026-11-04T08:16:31+00:00"
+        },
+        {
+            "name": "yellow-goose/assets",
+            "version": "0.2.0",
+            "dist": {
+                "type": "path",
+                "url": "packages/php/assets",
+                "reference": "747f12232a9f9a6494a11cbd1ce6c1dca9d48723"
+            },
+            "require": {
+                "ext-gd": "*",
+                "ext-pdo": "*",
+                "php": ">=8.1",
+                "yellow-goose/core": "^0.2",
+                "yellow-goose/jobs": "^0.2",
+                "yellow-goose/security": "^0.2"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "ZoltaGaska\\Assets\\": "src/Assets/"
+                }
+            },
+            "description": "Private, versioned GLB uploads with a transactional PHP worker",
+            "transport-options": {
+                "symlink": true,
+                "relative": true
+            }
+        },
+        {
+            "name": "yellow-goose/cms",
+            "version": "0.2.0",
+            "dist": {
+                "type": "path",
+                "url": "packages/php/cms",
+                "reference": "0510ff2a1db2019a89ded5feed714d2695689cbe"
+            },
+            "require": {
+                "ext-pdo": "*",
+                "php": ">=8.1",
+                "yellow-goose/core": "^0.2",
+                "yellow-goose/database": "^0.2",
+                "yellow-goose/resources": "^0.2",
+                "yellow-goose/security": "^0.2"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "ZoltaGaska\\Cms\\": "src/Cms/"
+                }
+            },
+            "description": "Project-scoped product catalogs with immutable content revisions and explicit publication",
+            "transport-options": {
+                "symlink": true,
+                "relative": true
+            }
+        },
+        {
+            "name": "yellow-goose/jobs",
+            "version": "0.2.0",
+            "dist": {
+                "type": "path",
+                "url": "packages/php/jobs",
+                "reference": "02b1fec480ab0cced2c25e6697614438df533dc9"
+            },
+            "require": {
+                "ext-pdo": "*",
+                "php": ">=8.1",
+                "yellow-goose/core": "^0.2"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "ZoltaGaska\\Jobs\\": "src/Jobs/"
+                }
+            },
+            "description": "Transactional PHP job queue and command-line worker",
+            "transport-options": {
+                "symlink": true,
+                "relative": true
+            }
         },
         {
             "name": "yellow-goose/resources",

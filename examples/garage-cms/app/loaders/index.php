@@ -1,0 +1,2 @@
+<?php
+return fn ($request, $params, Garage\Site $site) => $site->home($request);

@@ -18,7 +18,7 @@
         "ext-pdo_mysql": "For MySQL connections"
     },
     "scripts": {
-        "test": "php tests/contracts.php && php tests/run.php && php tests/navigation.php && php tests/modules.php"
+        "test": "php tests/contracts.php && php tests/run.php && php tests/navigation.php && php tests/modules.php && php tests/integration-foundation.php && php tests/b1.php && php tests/b2.php"
     },
     "type": "project",
     "repositories": [
@@ -42,6 +42,9 @@
     ],
     "require-dev": {
         "yellow-goose/resources": "^0.2",
-        "yellow-goose/validator-symfony": "^0.2"
+        "yellow-goose/validator-symfony": "^0.2",
+        "yellow-goose/jobs": "^0.2",
+        "yellow-goose/assets": "^0.2",
+        "yellow-goose/cms": "^0.2"
     }
 }

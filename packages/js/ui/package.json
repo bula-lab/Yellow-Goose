@@ -1,0 +1,8 @@
+{
+  "name": "@yellow-goose/ui",
+  "version": "0.2.0",
+  "type": "module",
+  "files": ["src", "README.md"],
+  "exports": {".": "./src/index.js", "./form": "./src/Form.jsx", "./table": "./src/DataTable.jsx", "./dialog": "./src/Dialog.jsx", "./assets": "./src/AssetPicker.jsx"},
+  "peerDependencies": {"react": "19.3.1"}
+}
