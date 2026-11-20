@@ -28,7 +28,7 @@ FROM runtime AS test
 COPY --from=node /usr/local/bin/node /usr/local/bin/node
 COPY --from=node /usr/local/lib/node_modules /usr/local/lib/node_modules
 RUN ln -s /usr/local/lib/node_modules/npm/bin/npm-cli.js /usr/local/bin/npm \
-    && apt-get update && apt-get install -y --no-install-recommends composer python3-venv \
+    && apt-get update && apt-get install -y --no-install-recommends composer unzip python3-venv \
     && rm -rf /var/lib/apt/lists/*
 COPY requirements-dev.txt /tmp/requirements-dev.txt
 RUN python3 -m venv /opt/venv && /opt/venv/bin/pip install -r /tmp/requirements-dev.txt \
