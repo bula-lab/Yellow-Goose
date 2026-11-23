@@ -122,6 +122,64 @@ def archives(directory):
     return releases
 
 
+def read_json(path):
+    return json.loads(path.read_text())
+
+
+def write_json(path, value):
+    path.write_text(json.dumps(value, indent=2) + '\n')
+
+
+def install_php(app, manifest, releases, env):
+    manifest['repositories'] = [{'type': 'package', 'package': releases}, {'packagist.org': False}]
+    write_json(app / 'composer.json', manifest)
+    run('composer', 'install', '--no-interaction', '--no-scripts', cwd=app, env=env)
+    installed = app / 'vendor/yellow-goose'
+    assert all(item.is_dir() and not item.is_symlink() for item in installed.iterdir())
+    return {item.name for item in installed.iterdir()}
+
+
+def npm_archives(dist, env, names):
+    packages = {}
+    for name in names:
+        result = json.loads(run('npm', 'pack', '--json', '--ignore-scripts', '--pack-destination', str(dist),
+                                cwd=ROOT / 'packages/js' / name, env=env))[0]
+        packages[result['name']] = 'file:' + str(dist / result['filename'])
+    return packages
+
+
+def build(app, package, tarballs, env):
+    used = set()
+    for kind in ['dependencies', 'devDependencies']:
+        for name in package[kind]:
+            if name.startswith('@yellow-goose/'):
+                package[kind][name] = tarballs[name]
+                used.add(name)
+    write_json(app / 'package.json', package)
+    # Pin third-party registry dependencies to the release build's versions and integrities.
+    # npm resolves the local libraries from the tarballs and prunes unused third-party dependencies.
+    source = read_json(ROOT / 'package-lock.json')['packages']
+    registry = {key: value for key, value in source.items() if value.get('resolved', '').startswith('https://')}
+    root = {field: package[field] for field in ['name', 'version', 'dependencies', 'devDependencies']}
+    write_json(app / 'package-lock.json', {'name': package['name'], 'version': package['version'], 'lockfileVersion': 3,
+                                          'requires': True, 'packages': {'': root, **registry}})
+    run('npm', 'install', '--ignore-scripts', '--no-audit', '--no-fund', '--prefer-offline', '--fetch-retries=0', cwd=app, env=env)
+    modules = app / 'node_modules'
+    assert not modules.is_symlink() and all(not (parent / 'node_modules').exists() for parent in app.parents)
+    installed = {item.name for item in (modules / '@yellow-goose').iterdir()}
+    assert installed == {name.split('/')[1] for name in used}
+    for name in used:
+        assert (modules / name / 'package.json').is_file() and not (modules / name).is_symlink()
+        locked = read_json(app / 'package-lock.json')['packages']['node_modules/' + name]
+        assert locked['resolved'].endswith('.tgz') and 'integrity' in locked and not locked.get('link')
+    assert (modules / '@babylonjs/core').is_dir() == ('@yellow-goose/babylon' in used)
+    run('npm', 'run', 'build', cwd=app, env=env)
+    ssr = (app / 'build/ssr/server.js').read_text()
+    assert all(token not in ssr for token in ['ThinEngine', 'WebGLRenderingContext', 'GLTFFileLoader']), 'Babylon in SSR'
+    shutil.rmtree(modules)
+    return read_json(app / 'public/build/.vite/manifest.json')
+
+
 def main():
     with tempfile.TemporaryDirectory(prefix="gaska-consumers-") as tmp:
         temporary = Path(tmp)

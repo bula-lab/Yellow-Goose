@@ -1,0 +1,15 @@
+{
+  "name": "yellow-goose/strategy-example",
+  "type": "project",
+  "description": "Server-authoritative asynchronous strategy reference game",
+  "require": {
+    "php": ">=8.1",
+    "ext-pdo_sqlite": "*",
+    "ext-session": "*",
+    "yellow-goose/game-strategy": "^0.2",
+    "yellow-goose/react-bridge": "^0.2",
+    "yellow-goose/ssr-v8js": "^0.2"
+  },
+  "autoload": {"psr-4": {"Colony\\": "src/Colony/"}},
+  "repositories": [{"type": "path", "url": "../../packages/php/*"}]
+}
