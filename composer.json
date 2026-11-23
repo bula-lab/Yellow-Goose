@@ -18,7 +18,7 @@
         "ext-pdo_mysql": "For MySQL connections"
     },
     "scripts": {
-        "test": "php tests/contracts.php && php tests/run.php && php tests/navigation.php && php tests/modules.php && php tests/integration-foundation.php && php tests/b1.php && php tests/b2.php && php tests/c1.php"
+        "test": "php tests/contracts.php && php tests/run.php && php tests/navigation.php && php tests/modules.php && php tests/integration-foundation.php && php tests/b1.php && php tests/b2.php && php tests/c1.php && php tests/d1.php"
     },
     "type": "project",
     "repositories": [
@@ -46,6 +46,7 @@
         "yellow-goose/jobs": "^0.2",
         "yellow-goose/assets": "^0.2",
         "yellow-goose/cms": "^0.2",
-        "yellow-goose/scene-api": "^0.2"
+        "yellow-goose/scene-api": "^0.2",
+        "yellow-goose/game-strategy": "^0.2"
     }
 }

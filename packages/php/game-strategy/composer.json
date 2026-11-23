@@ -1,0 +1,19 @@
+{
+    "name": "yellow-goose/game-strategy",
+    "version": "0.2.0",
+    "type": "library",
+    "description": "Server-timed strategy operations, durable polling and seasonal standings",
+    "require": {
+        "php": ">=8.1",
+        "ext-pdo": "*",
+        "yellow-goose/core": "^0.2",
+        "yellow-goose/security": "^0.2",
+        "yellow-goose/database": "^0.2",
+        "yellow-goose/jobs": "^0.2"
+    },
+    "autoload": {
+        "psr-4": {
+            "ZoltaGaska\\Strategy\\": "src/Strategy/"
+        }
+    }
+}

@@ -17,7 +17,7 @@ final class Queue
     public function connection(): PDO { return $this->pdo; }
 
     /** Use this connection for the enclosing domain transaction. */
-    public function enqueue(string $key, string $type, array $payload): void
+    public function enqueue(string $key, string $type, array $payload, ?int $availableAt = null): void
     {
         if (!preg_match('/^[a-zA-Z0-9_.:-]{1,150}$/D', $key) || !preg_match('/^[a-z][a-z0-9_.-]{0,79}$/D', $type)) {
             throw new \InvalidArgumentException('Invalid job identity.');
@@ -29,7 +29,7 @@ final class Queue
             ? ' ON DUPLICATE KEY UPDATE job_key = job_key' : ' ON CONFLICT(job_key) DO NOTHING';
         $insert = $this->pdo->prepare("INSERT INTO yg_jobs (job_key,job_type,payload,state,available_at,attempts)
             VALUES (?,?,?,'queued',?,0)" . $conflict);
-        $insert->execute([$key, $type, $json, time()]);
+        $insert->execute([$key, $type, $json, $availableAt ?? time()]);
         $find = $this->pdo->prepare('SELECT job_key,job_type,payload FROM yg_jobs WHERE job_key=?' . ($mysql ? ' FOR UPDATE' : ''));
         $find->execute([$key]);
         $job = $find->fetch(PDO::FETCH_ASSOC);

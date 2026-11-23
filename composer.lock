@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "dcc0546eda03bf3a6aacbc146660b929",
+    "content-hash": "e4f14e95f733ff4d7ce749db973af2ac",
     "packages": [
         {
             "name": "yellow-goose/core",
@@ -723,6 +723,34 @@
                 }
             },
             "description": "Project-scoped product catalogs with immutable content revisions and explicit publication",
+            "transport-options": {
+                "symlink": true,
+                "relative": true
+            }
+        },
+        {
+            "name": "yellow-goose/game-strategy",
+            "version": "0.2.0",
+            "dist": {
+                "type": "path",
+                "url": "packages/php/game-strategy",
+                "reference": "6462fb84b68f5092495fb0a9a7e4fdd8ac7cbc51"
+            },
+            "require": {
+                "ext-pdo": "*",
+                "php": ">=8.1",
+                "yellow-goose/core": "^0.2",
+                "yellow-goose/database": "^0.2",
+                "yellow-goose/jobs": "^0.2",
+                "yellow-goose/security": "^0.2"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "ZoltaGaska\\Strategy\\": "src/Strategy/"
+                }
+            },
+            "description": "Server-timed strategy operations, durable polling and seasonal standings",
             "transport-options": {
                 "symlink": true,
                 "relative": true
