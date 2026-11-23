@@ -7,6 +7,10 @@ Aktualizacja wykonawcza: A0–A2 są zapisane w 499ca68, B1/B2 w 1b13761. C1 dod
 struktura dystrybucji. Obecnie wydawany lokalnie jest jeden pakiet Composer
 `yellow-goose/framework`; aplikacja jest prywatnym projektem npm.
 
+D1 dodaje osobne biblioteki `yellow-goose/game-strategy` i `@yellow-goose/game-strategy`.
+Ekonomia pozostaje w aplikacji, aktualizacje korzystają z odpytywania HTTP.
+[Wdrożenie i walidacja D1](d1-implementation-2026-11-20.md).
+
 ## 1. Granice i nazewnictwo
 
 - Biblioteka udostępnia kod i publiczny kontrakt. Instalacja nie włącza automatycznie

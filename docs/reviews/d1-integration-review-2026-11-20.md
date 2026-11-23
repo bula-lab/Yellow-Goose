@@ -1,0 +1,19 @@
+# Przegląd integracji D1
+
+Sprawdziłem zmiany gry strategicznej względem `d58e397` na gałęzi `codex/modular-framework-a0-a2`. Zakres obejmuje pakiety PHP i npm, opcjonalny termin wykonania zadania, tabelę rankingu i przykład `examples/strategy-game`. Kryterium T6 dotyczy czasu serwera, równoległych budów i odbioru nagrody. [Plan funkcjonalny, §9B i §12](../reports/3d-framework-expansion-2026-11-13.md) · [Macierz walidacji, T6](../reports/3d-plan-validation-2026-11-18.md)
+
+## Wyniki
+
+| Przypadek | Dowód |
+| --- | --- |
+| P1, zmiana ceny po wyświetleniu oferty | Przy niezmienionej rewizji gracz widział koszt 10, a po wdrożeniu reguł płacił 80. Po poprawce komenda z poprzednią wersją reguł zwraca 409 `rules_conflict` i saldo pozostaje równe 100. Po ponownym potwierdzeniu ceny 80 powstaje jedno zadanie, a saldo wynosi 20. Powtórzenie tej komendy po następnej zmianie ceny na 90 zwraca pierwotne potwierdzenie. |
+| P2, odbiór po zamknięciu sezonu | W przykładzie kopalnia uruchomiona w sekundzie 100 ukończyła się dokładnie na końcu sezonu w sekundzie 105. Gracz otrzymał 10 punktów, a podgląd proponował jeszcze nagrodę, której API odmawiało kodem 409. Po poprawce serwer w zamkniętym sezonie zachowuje wynik budowy i zwraca pustą listę nagród. Test graniczny w `d1.php` przechodzi. |
+| Ranking po przerwie w pracy kolejki | W osobnym teście SQLite 1030 graczy miało po jednej wymagalnej budowie. Odczyt rozliczył wszystkie budowy. Dwie kolejne strony po trzy wiersze zawierały sześciu różnych graczy w kolejności identyfikatora, każdego z 10 punktami i miejscem 1. |
+| Pobieranie stron | SQLite użył indeksu `yg_strategy_due` przy wyborze operacji i `yg_strategy_ranking` do pobrania strony oraz policzenia graczy z wyższą punktacją. PHP pobiera do 128 operacji w jednej partii i najwyżej o jeden wiersz więcej, niż wynosi limit strony rankingu. |
+| Nawigacja tabeli w Chromium | Do siedmioosobowego sezonu dołączył gracz sortowany na początku listy. Przejście dalej przy limicie pięciu zwróciło nową pierwszą stronę i wyłączyło przycisk powrotu. Następna strona zawierała trzech graczy. Testowa odpowiedź 401 dla samego rankingu usunęła wiersze i widok kolonii. |
+| Klient HTTP | Trzynaście testów `tests/d1-strategy.test.mjs` przeszło w Node. Sprawdziły m.in. utratę potwierdzenia komendy, ręczne ponowienie po konflikcie ceny, zdublowane zdarzenia, lukę w historii, limit czasu i spóźnioną odpowiedź ze starego połączenia. Tabela rozpoznaje również odpowiedzi 401 i 403 bez treści JSON. |
+| Samodzielne pakiety | Instalacja PHP z archiwów pobrała `core`, `security`, `database`, `jobs` i `game-strategy`. W tym profilu, bez V8Js, przeszły 82 asercje SQLite, w tym wyścigi na osobnych połączeniach i wycofanie transakcji przy błędzie zapisu potwierdzenia. Niezależny klient npm zaimportował `@yellow-goose/game-strategy/store` z archiwum przy pustym cache. Blokada zależności zawierała jeden pakiet. |
+| Instalacja aplikacji | `tests/d1-packages.py --minimal-runtime` zbudował klienta i SSR z archiwów w odrębnym katalogu. Po usunięciu `node_modules`, przy `PATH` zawierającym wyłącznie `php` i `php-cgi`, w rzeczywistych sesjach CGI przeszły logowanie, budowa, naliczenie nagrody po awarii workera, ranking i renderowanie PHP/V8Js. |
+| Zgodność z C1 | Po wydzieleniu wspólnych funkcji instalacyjnych przeszedł pełny `tests/c1-packages.py`. Obejmował 69 asercji SQLite, oba profile klienta i natywny SSR PHP/V8Js z rzeczywistymi sesjami CGI. |
+
+Wszystkie operacje przypadające na dany moment muszą zostać rozliczone przed zwróceniem rankingu. Odczyt trzyma blokadę sezonu do ostatniej partii, więc długa przerwa w pracy kolejki wydłuży oczekiwanie graczy na zapis. Test z 1030 graczami sprawdza wynik, kolejność i użycie indeksów. Przepustowość sezonu przy docelowym obciążeniu wymaga osobnego pomiaru.

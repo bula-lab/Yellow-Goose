@@ -4,7 +4,8 @@ Plan z 2026-11-13, poprawiony po walidacji 2026-11-18; baza analizy b1e8000.
 
 Aktualny stan: A0–A2 są zapisane w 499ca68, B1/B2 w 1b13761. CI poprawione w 351c147.
 C1 wdrożone 2026-11-20: [zakres i dowody](c1-implementation-2026-11-20.md).
-Następny etap: C2 lub wybrana ścieżka D. [Integracja B1/B2](b1-b2-integration-2026-11-20.md).
+D1 wdrożone: [gra strategiczna, zakres i dowody](d1-implementation-2026-11-20.md).
+Następny etap: C2 lub D2. [Integracja B1/B2](b1-b2-integration-2026-11-20.md).
 Poniższy opis stanu początkowego i bramek zachowuje kontekst pierwotnej analizy.
 Dokument jest roadmapą. Można rozpocząć inwentaryzację A0; zgodna ekstrakcja A1
 wymaga najpierw sprawdzonej macierzy eksportów i konsumentów A0. Dalsze fale mają

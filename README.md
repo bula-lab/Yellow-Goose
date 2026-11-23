@@ -99,7 +99,10 @@ Notatnik zachowuje dotychczasowy kontrakt; prosty przykład kont i zasobów pozo
 w examples/modular-api. C1 dodaje niezależne scene-api i npm editor: trwałe projekty,
 instancje modeli, transformacje, autosave, Undo/Redo i kontrolę konfliktów dwóch kart.
 [Przykład edytora](examples/scene-editor/README.md) · [Wyniki C1](docs/reports/c1-implementation-2026-11-20.md).
-Import CAD i gry są kolejnymi etapami.
+D1 dodaje osobny game-strategy i klienta HTTP: budowy według czasu serwera,
+atomowe koszty, jednorazowe nagrody i ranking sezonowy.
+[Gra demonstracyjna](examples/strategy-game/README.md) · [Wyniki D1](docs/reports/d1-implementation-2026-11-20.md).
+Import CAD i symulacja na żywo D2 są kolejnymi etapami.
 
 Logo, warianty i pliki źródłowe: [identyfikacja frameworka](docs/branding.md).
 
