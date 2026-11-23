@@ -4,7 +4,7 @@ import { localUrl, responseData } from './http.js';
 const firstQuery = () => ({ filters: {}, sort: null, direction: 'asc', cursor: null, previous: [] });
 
 export function DataTable({ fields, sortable = [], filterable = [], endpoint, initialPage, rowKey = 'id',
-    renderCell, limit = 25, state, caption = 'Wyniki' }) {
+    renderCell, renderPageInfo, onAccessDenied, limit = 25, state, caption = 'Wyniki' }) {
     const id = useId();
     const [query, setQuery] = useState(firstQuery);
     const [page, setPage] = useState(initialPage || { items: [], nextCursor: null });
@@ -29,12 +29,24 @@ export function DataTable({ fields, sortable = [], filterable = [], endpoint, in
         for (const [name, value] of Object.entries(query.filters)) if (value) url.searchParams.set('filter[' + name + ']', value);
         fetch(url, { credentials: 'same-origin', signal: controller.signal }).then(responseData).then(result => {
             if (!Array.isArray(result.items) || (result.nextCursor != null && typeof result.nextCursor !== 'string')) throw new Error('Invalid table response.');
-            if (!controller.signal.aborted) { setPage(result); setStatus('ready'); }
-        }).catch(() => { if (!controller.signal.aborted) setStatus('error'); });
+            if (!controller.signal.aborted) {
+                setPage(result); setStatus('ready');
+                if (result.reset) state?.set(tableKey, { ...query, cursor: null, previous: [] });
+            }
+        }).catch(error => {
+            if (controller.signal.aborted) return;
+            setStatus('error');
+            if ([401, 403].includes(error.status)) {
+                setPage({ items: [], nextCursor: null });
+                onAccessDenied?.();
+            }
+        });
         return () => controller.abort();
-    }, [query, endpoint, limit, refresh, state, tableKey, initialPage]);
+    }, [query, endpoint, limit, refresh, state, tableKey, initialPage, onAccessDenied]);
 
     function go(next) { state?.set(tableKey, next); setQuery(next); }
+    const previous = page.reset ? [] : query.previous;
+    const cursor = page.reset ? null : query.cursor;
     return <section aria-busy={status === 'loading'}>
         {filterable.length > 0 && <form onSubmit={e => { e.preventDefault(); go({ ...query, filters: draft, cursor: null, previous: [] }); }}>
             {filterable.map(name => <label key={name} htmlFor={id + name}>{fields[name]?.label || name}
@@ -42,6 +54,7 @@ export function DataTable({ fields, sortable = [], filterable = [], endpoint, in
             </label>)}<button type="submit">Filtruj</button>
         </form>}
         {status === 'error' && <div role="alert">Nie udało się pobrać wyników. <button onClick={() => setRefresh(n => n + 1)}>Ponów</button></div>}
+        {renderPageInfo?.(page)}
         <table><caption>{caption}</caption><thead><tr>{Object.keys(fields).map(name => <th key={name} scope="col"
             aria-sort={query.sort === name ? (query.direction === 'asc' ? 'ascending' : 'descending') : undefined}>
             {sortable.includes(name) ? <button onClick={() => go({ ...query, sort: name,
@@ -49,9 +62,9 @@ export function DataTable({ fields, sortable = [], filterable = [], endpoint, in
                 {fields[name].label || name}</button> : (fields[name].label || name)}
         </th>)}</tr></thead><tbody>{page.items.map(row => <tr key={row[rowKey]}>{Object.keys(fields).map(name =>
             <td key={name}>{renderCell ? renderCell(name, row) : String(row[name] ?? '')}</td>)}</tr>)}</tbody></table>
-        <button disabled={!query.previous.length || status === 'loading'} onClick={() =>
-            go({ ...query, cursor: query.previous.at(-1), previous: query.previous.slice(0, -1) })}>Poprzednia</button>
+        <button disabled={!previous.length || status === 'loading'} onClick={() =>
+            go({ ...query, cursor: previous.at(-1), previous: previous.slice(0, -1) })}>Poprzednia</button>
         <button disabled={page.nextCursor == null || status === 'loading'} onClick={() =>
-            go({ ...query, cursor: page.nextCursor, previous: [...query.previous, query.cursor] })}>Następna</button>
+            go({ ...query, cursor: page.nextCursor, previous: [...previous, cursor] })}>Następna</button>
     </section>;
 }

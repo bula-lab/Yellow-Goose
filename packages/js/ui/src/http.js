@@ -1,12 +1,12 @@
 export async function responseData(response) {
-    const data = await response.json();
     if (!response.ok) {
-        const error = new Error(typeof data.error === 'string' ? data.error : 'Request failed.');
+        const data = await response.json().catch(() => null);
+        const error = new Error(typeof data?.error === 'string' ? data.error : 'Request failed.');
         error.status = response.status;
-        error.errors = data.errors || {};
+        error.errors = data?.errors || {};
         throw error;
     }
-    return data;
+    return response.json();
 }
 
 export function localUrl(path) {
